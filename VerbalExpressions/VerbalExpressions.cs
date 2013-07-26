@@ -37,26 +37,15 @@ namespace VerbalExpression.Net
 			return this;
 		}
 
-		public VerbalExpressions StartOfLine(bool enable)
+		public VerbalExpressions StartOfLine(bool enable = true)
 		{
 			_prefixes = enable ? "^" : "";
 			return this;
 		}
 
-		public VerbalExpressions StartOfLine()
-		{
-			return StartOfLine(true);
-		}
-
-		public VerbalExpressions EndOfLine(bool enable)
+		public VerbalExpressions EndOfLine(bool enable = true)
 		{
 			_suffixes = enable ? "$" : "";
-			return this;
-		}
-
-		public VerbalExpressions EndOfLine()
-		{
-			EndOfLine(true);
 			return this;
 		}
 
@@ -217,22 +206,21 @@ namespace VerbalExpression.Net
 			return this;
 		}
 
-		public VerbalExpressions WithAnyCase(bool enable)
+		public VerbalExpressions WithAnyCase(bool enable = true)
 		{
-			if (enable) AddModifier('i');
-			else RemoveModifier('i');
+			if (enable) 
+                AddModifier('i');
+			else 
+                RemoveModifier('i');
 			return this;
 		}
 
-		public VerbalExpressions WithAnyCase()
+		public VerbalExpressions SearchOneLine(bool enable = true)
 		{
-			return WithAnyCase(true);
-		}
-
-		public VerbalExpressions SearchOneLine(bool enable)
-		{
-			if (enable) RemoveModifier('m');
-			else AddModifier('m');
+			if (enable) 
+                RemoveModifier('m');
+			else 
+                AddModifier('m');
 			return this;
 		}
 
