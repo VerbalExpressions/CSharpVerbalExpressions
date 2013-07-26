@@ -1,10 +1,10 @@
 ﻿/*!
- * VerbalExpressions .NET Library v0.1
+ * CSharpVerbalExpressions v0.1
  * https://github.com/VerbalExpressions/CSharpVerbalExpressions
  * 
  * @psoholt
  *
- * Date: 2013-07-25
+ * Date: 2013-07-26
  * 
  */
 
@@ -32,7 +32,7 @@ namespace VerbalExpression.Net
 		{
 			_source = _source != null ? _source + value : value;
 			if (_source != null)
-				patternRegex = new Regex(_prefixes + _source + _suffixes, RegexOptions.Multiline);
+				patternRegex = new Regex(_prefixes + _source + _suffixes, _modifiers);
 
 			return this;
 		}
@@ -165,9 +165,9 @@ namespace VerbalExpression.Net
 				case 'i':
 					_modifiers |= RegexOptions.IgnoreCase;
 					break;
-				//case 'x':
-				//	_modifiers |= Pattern.COMMENTS;
-				//	break;
+				case 'x':
+					_modifiers |= RegexOptions.IgnorePatternWhitespace;
+					break;
 				case 'm':
 					_modifiers |= RegexOptions.Multiline;
 					break;
@@ -190,25 +190,25 @@ namespace VerbalExpression.Net
 			switch (modifier)
 			{
 				//case 'd':
-				//	_modifiers ^= Pattern.UNIX_LINES;
+				//	_modifiers &= ~Pattern.UNIX_LINES;
 				//	break;
 				case 'i':
-					_modifiers ^= RegexOptions.IgnoreCase;
+					_modifiers &= ~RegexOptions.IgnoreCase;
 					break;
-				//case 'x':
-				//	_modifiers ^= Pattern.COMMENTS;
-				//	break;
+				case 'x':
+					_modifiers &= ~RegexOptions.IgnorePatternWhitespace;
+					break;
 				case 'm':
-					_modifiers ^= RegexOptions.Multiline;
+					_modifiers &= ~RegexOptions.Multiline;
 					break;
 				//case 's':
-				//	_modifiers ^= Pattern.DOTALL;
+				//	_modifiers &= ~Pattern.DOTALL;
 				//	break;
 				//case 'u':
-				//	_modifiers ^= Pattern.UNICODE_CASE;
+				//	_modifiers &= ~Pattern.UNICODE_CASE;
 				//	break;
 				//case 'U':
-				//	_modifiers ^= Pattern.UNICODE_CHARACTER_CLASS;
+				//	_modifiers &= ~Pattern.UNICODE_CHARACTER_CLASS;
 				//	break;
 				//default:
 				//	break;
@@ -274,6 +274,12 @@ namespace VerbalExpression.Net
 		{
 			Add(string.Empty);
 			return patternRegex.IsMatch(toTest);
+		}
+
+		public Regex ToRegex()
+		{
+			Add(string.Empty);
+			return patternRegex;
 		}
 
 		public override string ToString()
