@@ -12,31 +12,28 @@ using System.Text.RegularExpressions;
 
 namespace VerbalExpression.Net
 {
-	public class VerbalExpressions : Regex
+	public class VerbalExpressions
 	{
 		private string _prefixes = "";
 		private string _source = "";
 		private string _suffixes = "";
-		private string _pattern = "";
 
 		private RegexOptions _modifiers = RegexOptions.Multiline;
-		private Regex p;
+		private Regex patternRegex;
 
 		private string Sanitize(string value)
 		{
 			if (value != null) 
 				return value;
-			return Escape(value);
+			return Regex.Escape(value);
 		}
 
 		public VerbalExpressions Add(string value)
 		{
 			_source = _source != null ? _source + value : value;
 			if (_source != null)
-			{
-				p = new Regex(_prefixes + _source + _suffixes, RegexOptions.Multiline);
-				_pattern = p.ToString();
-			}
+				patternRegex = new Regex(_prefixes + _source + _suffixes, RegexOptions.Multiline);
+
 			return this;
 		}
 
@@ -59,7 +56,8 @@ namespace VerbalExpression.Net
 
 		public VerbalExpressions EndOfLine()
 		{
-			return EndOfLine(true);
+			EndOfLine(true);
+			return this;
 		}
 
 		public VerbalExpressions Then(string value)
@@ -97,7 +95,7 @@ namespace VerbalExpression.Net
 
 		public VerbalExpressions Replace(string value)
 		{
-			_source.Replace(_pattern, value);
+			_source.Replace(patternRegex.ToString(), value);
 			return this;
 		}
 
@@ -257,8 +255,10 @@ namespace VerbalExpression.Net
 
 		public VerbalExpressions Or(string value)
 		{
-			if (_prefixes.IndexOf("(") == -1) _prefixes += "(";
-			if (_suffixes.IndexOf(")") == -1) _suffixes = ")" + _suffixes;
+			if (_prefixes.IndexOf("(") == -1)
+				_prefixes += "(";
+			if (_suffixes.IndexOf(")") == -1)
+				_suffixes = ")" + _suffixes;
 
 			Add(")|(");
 			if (value != null) Then(value);
@@ -267,12 +267,19 @@ namespace VerbalExpression.Net
 
 		public bool Test(string toTest)
 		{
-			return IsMatch(toTest, _pattern);
+			return IsMatch(toTest);
+		}
+
+		public bool IsMatch(string toTest)
+		{
+			Add(string.Empty);
+			return patternRegex.IsMatch(toTest);
 		}
 
 		public override string ToString()
 		{
-			return _pattern;
+			Add(string.Empty);
+			return patternRegex.ToString();
 		}
 	}
 }
