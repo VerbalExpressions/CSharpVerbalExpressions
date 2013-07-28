@@ -23,13 +23,14 @@ namespace VerbalExpression.Net
 
 		private string Sanitize(string value)
 		{
-			if (value != null) 
-				return value;
+			if (value == null) 
+				return string.Empty;
 			return Regex.Escape(value);
 		}
 
-		public VerbalExpressions Add(string value)
+		public VerbalExpressions Add(string value, bool sanitize = true)
 		{
+		    value = sanitize ? Sanitize(value) : value;
 			_source = _source != null ? _source + value : value;
 			if (_source != null)
 				patternRegex = new Regex(_prefixes + _source + _suffixes, _modifiers);
@@ -52,7 +53,7 @@ namespace VerbalExpression.Net
 		public VerbalExpressions Then(string value)
 		{
 			value = Sanitize(value);
-			Add("(" + value + ")");
+            Add("(" + value + ")", sanitize: false);
 			return this;
 		}
 
@@ -65,20 +66,20 @@ namespace VerbalExpression.Net
 		public VerbalExpressions Maybe(string value)
 		{
 			value = Sanitize(value);
-			Add("(" + value + ")?");
+            Add("(" + value + ")?", sanitize: false);
 			return this;
 		}
 
 		public VerbalExpressions Anything()
 		{
-			Add("(.*)");
+			Add("(.*)", sanitize: false);
 			return this;
 		}
 
 		public VerbalExpressions AnythingBut(string value)
 		{
 			value = Sanitize(value);
-			Add("([^" + value + "]*)");
+			Add("([^" + value + "]*)", sanitize: false);
 			return this;
 		}
 
@@ -90,7 +91,7 @@ namespace VerbalExpression.Net
 
 		public VerbalExpressions LineBreak()
 		{
-			Add("(\\n|(\\r\\n))");
+			Add("(\\n|(\\r\\n))", sanitize:false);
 			return this;
 		}
 
@@ -108,14 +109,14 @@ namespace VerbalExpression.Net
 
 		public VerbalExpressions Word()
 		{
-			Add("\\w+");
+			Add("\\w+", sanitize:false);
 			return this;
 		}
 
 		public VerbalExpressions AnyOf(string value)
 		{
 			value = Sanitize(value);
-			Add("[" + value + "]");
+            Add("[" + value + "]", sanitize: false);
 			return this;
 		}
 
@@ -140,7 +141,7 @@ namespace VerbalExpression.Net
 
 			value += "]";
 
-			Add(value);
+            Add(value, sanitize: false);
 			return this;
 		}
 
@@ -237,7 +238,7 @@ namespace VerbalExpression.Net
 				break;
 			}
 
-			Add(value);
+            Add(value, sanitize: false);
 			return this;
 		}
 
@@ -248,7 +249,7 @@ namespace VerbalExpression.Net
 			if (_suffixes.IndexOf(")") == -1)
 				_suffixes = ")" + _suffixes;
 
-			Add(")|(");
+            Add(")|(", sanitize: false);
 			if (value != null) Then(value);
 			return this;
 		}

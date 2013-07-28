@@ -85,6 +85,15 @@ namespace VerbalExpressionsUnitTests
 			var isMatch = verbEx.IsMatch("http://www.google.com/");
 			Assert.IsFalse(isMatch, "Should not match '/' in end");
 		}
+
+		[TestMethod]
+		public void Add_AddDotCom_DoesNotMatchGoogleComWithoutDot()
+		{
+			verbEx.Add(".com");
+
+			var isMatch = verbEx.IsMatch("http://www.googlecom/");
+			Assert.IsFalse(isMatch, "Should not match 'ecom'");
+		}
 	
 		[TestMethod]
 		public void Anything_StartOfLineAnythingEndOfline_DoesMatchAnyThing()
