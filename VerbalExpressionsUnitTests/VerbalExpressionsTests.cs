@@ -139,5 +139,50 @@ namespace VerbalExpressionsUnitTests
 			var isMatch = verbEx.IsMatch("wWw");
 			Assert.IsFalse(isMatch, "Should not match any case");
 		}
+
+        [TestMethod]
+        public void Sanitization_Works()
+        {
+            verbEx.Find("^[0-9]{5}$");
+            var isMatch = verbEx.IsMatch("^[0-9]{5}$");
+
+            Assert.IsTrue(isMatch, "Regular expression metacharacters should be escaped");
+        }
+
+        [TestMethod]
+        public void Replace_ShouldReplace()
+        {
+            var result = verbEx.Find("red").Replace("We have a red house", "blue");
+
+            Assert.AreEqual("We have a blue house", result, "Replace should replace");
+        }
+
+        [TestMethod]
+        public void NestedVerbalExpressions()
+        {
+            string link = "ftp://ftp.google.com/";
+
+            verbEx.Find(
+                    new VerbalExpressions()
+                    .Find("http")
+                    .Maybe("s")
+                    .Or("ftp")
+                 )
+                 .Then("://");
+
+            bool match = verbEx.Test(link);
+
+            Assert.IsTrue(match, "Nested find expression should work");
+        }
+
+        [TestMethod]
+        public void Multiple_DoesNotAddPlusIfItAlreadyExists()
+        {
+            verbEx.Multiple(
+                new VerbalExpressions().Multiple("a")
+                );
+
+            Assert.AreEqual("a+", verbEx.ToString(), "Multiple should not add a plus if it already exists");
+        }
 	}
 }
