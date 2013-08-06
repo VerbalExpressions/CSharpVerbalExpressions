@@ -254,5 +254,19 @@ namespace VerbalExpressionsUnitTests
       //Assert
       Assert.IsFalse(hasThrownNullReferenceEx);
     }
+
+    [TestMethod]
+    public void Range_WhenOddNumberOfItemsInArray_ShouldAppendWithPipe()
+    {
+      //Arrange
+      string text = "abcd7sdadqascdaswde";
+      object[] range = new object[3] { 1, 6, 7 };
+
+      //Act
+      verbEx.Range(range);
+      //Assert
+      Assert.IsTrue(verbEx.IsMatch(text));
+    }
+
 	}
 }

@@ -204,6 +204,7 @@ namespace VerbalExpression.Net
         throw new ArgumentOutOfRangeException("range must have at least 2 values");
       }
 
+
       string[] sanitizedStrings = args.Select(argument =>
           {
             if (object.ReferenceEquals(argument,null))
@@ -230,6 +231,9 @@ namespace VerbalExpression.Net
         return this;
       }
 
+      bool hasOddNumberOfParams = (sanitizedStrings.Length % 2) > 0;
+
+
       StringBuilder sb = new StringBuilder("[");
       for (int _from = 0; _from < sanitizedStrings.Length; _from += 2)
       {
@@ -241,6 +245,11 @@ namespace VerbalExpression.Net
         sb.AppendFormat("{0}-{1}", sanitizedStrings[_from], sanitizedStrings[_to]);
       }
       sb.Append("]");
+
+      if (hasOddNumberOfParams)
+      {
+        sb.AppendFormat("|{0}", sanitizedStrings.Last());
+      }
 
 			Add(sb.ToString());
 			return this;
