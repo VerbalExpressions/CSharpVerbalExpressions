@@ -21,15 +21,30 @@ namespace VerbalExpression.Net
 		private RegexOptions _modifiers = RegexOptions.Multiline;
 		private Regex patternRegex;
 
+        private const string UrlRegEx = @"((([A-Za-z]{3,9}:(?:\/\/)?)(?:[^-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(:[0-9]+)?|(?:ww‌​w.|[^-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?‌​(?:[\w]*))?)";
+        private const string EmailRegEx = @"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}";
+        //private const string UrlRegEx = @"abc";
+        //private const string EmailRegEx = @"[def]";
+
 		private string Sanitize(string value)
 		{
-			if (value != null) 
-				return value;
+			if (value == null) 
+				return string.Empty;
 			return Regex.Escape(value);
 		}
 
-		public VerbalExpressions Add(string value)
+        public const VerbalExpressionsEnum email = VerbalExpressionsEnum.email;
+        public const VerbalExpressionsEnum url = VerbalExpressionsEnum.url;
+
+	    public VerbalExpressions Add(VerbalExpressionsEnum verbEx)
+	    {
+	        var value = GetRegex(verbEx);
+			return Add(value, sanitize:false);
+		}
+
+	    public VerbalExpressions Add(string value, bool sanitize = true)
 		{
+		    value = sanitize ? Sanitize(value) : value;
 			_source = _source != null ? _source + value : value;
 			if (_source != null)
 				patternRegex = new Regex(_prefixes + _source + _suffixes, _modifiers);
@@ -49,36 +64,48 @@ namespace VerbalExpression.Net
 			return this;
 		}
 
-		public VerbalExpressions Then(string value)
+		public VerbalExpressions Then(string value, bool sanitize = true)
 		{
-			value = Sanitize(value);
-			Add("(" + value + ")");
+		    value = sanitize ? Sanitize(value) : value;
+            Add("(" + value + ")", sanitize: false);
 			return this;
 		}
 
-		public VerbalExpressions Find(string value)
+        public VerbalExpressions Then(VerbalExpressionsEnum verbExEnum)
+        {
+            var value = GetRegex(verbExEnum);
+            return Then(value, sanitize: false);
+        }
+
+        public VerbalExpressions Find(string value)
 		{
 			Then(value);
 			return this;
 		}
 
-		public VerbalExpressions Maybe(string value)
+		public VerbalExpressions Maybe(string value, bool sanitize = true)
 		{
-			value = Sanitize(value);
-			Add("(" + value + ")?");
+			value = sanitize ? Sanitize(value) : value;
+            Add("(" + value + ")?", sanitize: false);
 			return this;
 		}
+
+        public VerbalExpressions Maybe(VerbalExpressionsEnum verbExEnum)
+        {
+            var value = GetRegex(verbExEnum);
+            return Maybe(value, sanitize: false);
+        }
 
 		public VerbalExpressions Anything()
 		{
-			Add("(.*)");
+			Add("(.*)", sanitize: false);
 			return this;
 		}
 
-		public VerbalExpressions AnythingBut(string value)
+		public VerbalExpressions AnythingBut(string value, bool sanitize = true)
 		{
-			value = Sanitize(value);
-			Add("([^" + value + "]*)");
+            value = sanitize ? Sanitize(value) : value;
+            Add("([^" + value + "]*)", sanitize: false);
 			return this;
 		}
 
@@ -90,7 +117,7 @@ namespace VerbalExpression.Net
 
 		public VerbalExpressions LineBreak()
 		{
-			Add("(\\n|(\\r\\n))");
+			Add("(\\n|(\\r\\n))", sanitize:false);
 			return this;
 		}
 
@@ -108,14 +135,14 @@ namespace VerbalExpression.Net
 
 		public VerbalExpressions Word()
 		{
-			Add("\\w+");
+			Add("\\w+", sanitize:false);
 			return this;
 		}
 
 		public VerbalExpressions AnyOf(string value)
 		{
 			value = Sanitize(value);
-			Add("[" + value + "]");
+            Add("[" + value + "]", sanitize: false);
 			return this;
 		}
 
@@ -140,7 +167,7 @@ namespace VerbalExpression.Net
 
 			value += "]";
 
-			Add(value);
+            Add(value, sanitize: false);
 			return this;
 		}
 
@@ -237,19 +264,28 @@ namespace VerbalExpression.Net
 				break;
 			}
 
-			Add(value);
+            Add(value, sanitize: false);
 			return this;
 		}
 
-		public VerbalExpressions Or(string value)
+
+		public VerbalExpressions Or(VerbalExpressionsEnum verbEx)
+		{
+		    var value = GetRegex(verbEx);
+            Or(value, sanitize:false);
+			return this;
+		}
+
+		public VerbalExpressions Or(string value, bool sanitize = true)
 		{
 			if (_prefixes.IndexOf("(") == -1)
 				_prefixes += "(";
 			if (_suffixes.IndexOf(")") == -1)
 				_suffixes = ")" + _suffixes;
 
-			Add(")|(");
-			if (value != null) Then(value);
+            Add(")|(", sanitize: false);
+			if (value != null) 
+                Add(value, sanitize:false);
 			return this;
 		}
 
@@ -275,5 +311,14 @@ namespace VerbalExpression.Net
 			Add(string.Empty);
 			return patternRegex.ToString();
 		}
+
+        private string GetRegex(VerbalExpressionsEnum verbExEnum)
+        {
+            if (verbExEnum == VerbalExpressionsEnum.email)
+                return EmailRegEx;
+            if (verbExEnum == VerbalExpressionsEnum.url)
+                return UrlRegEx;
+            return string.Empty;
+        }
 	}
 }
