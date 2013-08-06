@@ -36,7 +36,7 @@ namespace VerbalExpression.Net
 		private string _suffixes = "";
 
 		private RegexOptions _modifiers = RegexOptions.Multiline;
-		private Regex patternRegex;
+		private Regex _patternRegex = null;
     #endregion Private Members
 
     #region Private Properties
@@ -45,6 +45,21 @@ namespace VerbalExpression.Net
       get
       {
         return _prefixes + _source + _suffixes;
+      }
+    }
+    private Regex PatternRegex
+    {
+      get
+      {
+        if (_patternRegex == null)
+        {
+          _patternRegex = new Regex(this.RegexString, _modifiers);
+        }
+        return _patternRegex;
+      }
+      set
+      {
+        _patternRegex = value;
       }
     }
     #endregion Private Properties
@@ -77,7 +92,7 @@ namespace VerbalExpression.Net
       }
 
       _source += value;
-      patternRegex = new Regex(this.RegexString, _modifiers);
+      PatternRegex = new Regex(this.RegexString, _modifiers);
       
 			return this;
 		}
@@ -129,7 +144,14 @@ namespace VerbalExpression.Net
 
 		public VerbalExpressions Replace(string value)
 		{
-			_source.Replace(patternRegex.ToString(), value);
+      string whereToReplace = PatternRegex.ToString();
+
+      if(whereToReplace.Length == 0)
+      {
+        return this;
+      }
+
+      _source.Replace(whereToReplace, value);
 			return this;
 		}
 
@@ -341,19 +363,19 @@ namespace VerbalExpression.Net
 		public bool IsMatch(string toTest)
 		{
 			Add(string.Empty);
-			return patternRegex.IsMatch(toTest);
+      return PatternRegex.IsMatch(toTest);
 		}
 
 		public Regex ToRegex()
 		{
 			Add(string.Empty);
-			return patternRegex;
+      return PatternRegex;
 		}
 
 		public override string ToString()
 		{
 			Add(string.Empty);
-			return patternRegex.ToString();
+      return PatternRegex.ToString();
     }
     #endregion Public Methods
   }

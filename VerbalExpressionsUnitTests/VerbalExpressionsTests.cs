@@ -206,12 +206,53 @@ namespace VerbalExpressionsUnitTests
     [TestMethod]
     public void Range_WhenArrayParameterHasValuesInReverseOrder_ReturnsCorrectResultForCorrectOrder()
     {
+      //Arrange
       object[] inversedOrderArray = new object[2] { 9, 2 };
       verbEx.Range(inversedOrderArray);
       string lookupString = "testing 8 another test";
 
+      //Act
       bool isMatch = verbEx.IsMatch(lookupString);
+
+      //Assert
       Assert.IsTrue(isMatch);
+    }
+
+    [TestMethod]
+    public void Range_WhenArrayContainsNullParameter_ItIsIgnoredAndRemovedFromList()
+    {
+      //Arrange
+      object[] inversedOrderArray = new object[4] { 1, null, null, 7 };
+      verbEx.Range(inversedOrderArray);
+      string lookupString = "testing 5 testing";
+      
+      //Act
+      bool isMatch = verbEx.IsMatch(lookupString);
+      
+      //Assert
+      Assert.IsTrue(isMatch);
+
+    }
+
+    [TestMethod]
+    public void Replace_WhenCalledImmediatelyAfteInitialize_ShouldNotThrowNullReferenceException()
+    {
+      //Arrange
+      string value = "value";
+      bool hasThrownNullReferenceEx = false;
+
+      //Act
+      try
+      {
+        verbEx.Replace(value);
+      }
+      catch (NullReferenceException)
+      {
+        hasThrownNullReferenceEx = true;
+      }
+
+      //Assert
+      Assert.IsFalse(hasThrownNullReferenceEx);
     }
 	}
 }
