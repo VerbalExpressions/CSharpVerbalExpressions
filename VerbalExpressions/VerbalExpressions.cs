@@ -10,7 +10,7 @@
 
 using System.Text.RegularExpressions;
 
-namespace VerbalExpression.Net
+namespace CSharpVerbalExpressions
 {
     public class VerbalExpressions
     {
