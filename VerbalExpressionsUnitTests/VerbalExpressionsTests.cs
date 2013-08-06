@@ -10,18 +10,18 @@ namespace VerbalExpressionsUnitTests
 	public class VerbalExpressionsTests
 	{
 
-		private VerbalExpressions verbEx;
+		private VerbalExpressions verbEx = VerbalExpressions.NewExpression;
 
 		[TestInitialize]
 		public void Initialize()
 		{
-			verbEx = new VerbalExpressions();
+			verbEx = VerbalExpressions.NewExpression;
 		}
 
 		[TestMethod]
 		public void TestingIfWeHaveAValidURL()
 		{
-			verbEx = new VerbalExpressions()
+			verbEx = VerbalExpressions.NewExpression
 						.StartOfLine()
 						.Then( "http" )
 						.Maybe( "s" )
@@ -139,5 +139,79 @@ namespace VerbalExpressionsUnitTests
 			var isMatch = verbEx.IsMatch("wWw");
 			Assert.IsFalse(isMatch, "Should not match any case");
 		}
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentNullException))]
+    public void Sanitize_Handles_Null_String()
+    {
+      //Arrange
+      string value = null;
+
+      //Act
+      //Assert
+      value = verbEx.Sanitize(value);
+    }
+
+    [TestMethod]
+    public void Sanitize_AddCharactersThatShouldBeEscaped_ReturnsEscapedString()
+    {
+      //Arrange
+      string value = "*+?";
+      string result = string.Empty;
+      string expected = @"\*\+\?";
+
+      //Act
+      result = verbEx.Sanitize(value);
+
+      //Assert
+      Assert.AreEqual<string>(expected, result);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentNullException))]
+    public void Add_WhenNullStringPassedAsParameter_ShouldThrowNullArgumentException()
+    {
+      //Arrange
+      string value = null;
+
+      //Act
+      //Assert
+      verbEx.Add(value);      
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentNullException))]
+    public void Range_WhenNullParameterPassed_ShouldThrowArgumentNullException()
+    {
+      //Arrange
+      object[] value = null;
+
+      //Act
+      //Assert
+      verbEx.Range(value);
+    }
+
+    [TestMethod]
+    [ExpectedException(typeof(ArgumentOutOfRangeException))]
+    public void Range_WhenArrayParameterHasOnlyOneValue_ShouldThrowArgumentOutOfRangeException()
+    {
+      //Arrange
+      object[] value = new object[1] { 0 };
+
+      //Act
+      //Assert
+      verbEx.Range(value);
+    }
+
+    [TestMethod]
+    public void Range_WhenArrayParameterHasValuesInReverseOrder_ReturnsCorrectResultForCorrectOrder()
+    {
+      object[] inversedOrderArray = new object[2] { 9, 2 };
+      verbEx.Range(inversedOrderArray);
+      string lookupString = "testing 8 another test";
+
+      bool isMatch = verbEx.IsMatch(lookupString);
+      Assert.IsTrue(isMatch);
+    }
 	}
 }

@@ -3,37 +3,82 @@
  * https://github.com/VerbalExpressions/CSharpVerbalExpressions
  * 
  * @psoholt
- *
+ * 
  * Date: 2013-07-26
  * 
+ * Additions and Refactoring
+ * @alexpeta
+ * 
+ * Date: 2013-08-06
  */
-
+using System;
+using System.Text;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace VerbalExpression.Net
 {
 	public class VerbalExpressions
-	{
-		private string _prefixes = "";
+  {
+    #region Statics
+    public static VerbalExpressions NewExpression
+    {
+      get
+      {
+        return new VerbalExpressions();
+      }
+    }
+    #endregion Statics
+
+    #region Private Members
+    private string _prefixes = "";
 		private string _source = "";
 		private string _suffixes = "";
 
 		private RegexOptions _modifiers = RegexOptions.Multiline;
 		private Regex patternRegex;
+    #endregion Private Members
 
-		private string Sanitize(string value)
+    #region Private Properties
+    private string RegexString
+    {
+      get
+      {
+        return _prefixes + _source + _suffixes;
+      }
+    }
+    #endregion Private Properties
+
+    #region Constructors
+    private VerbalExpressions()
+    {
+    }
+    static VerbalExpressions()
+    {   
+    }
+    #endregion Constructors
+
+    #region Public Methods
+    public string Sanitize(string value)
 		{
-			if (value != null) 
-				return value;
-			return Regex.Escape(value);
+      if (string.IsNullOrEmpty(value))
+      {
+        throw new ArgumentNullException("value must be provided");
+      }
+
+      return Regex.Escape(value);
 		}
 
 		public VerbalExpressions Add(string value)
 		{
-			_source = _source != null ? _source + value : value;
-			if (_source != null)
-				patternRegex = new Regex(_prefixes + _source + _suffixes, _modifiers);
+      if (object.ReferenceEquals(value,null))
+      {
+        throw new ArgumentNullException("value must be provided");
+      }
 
+      _source += value;
+      patternRegex = new Regex(this.RegexString, _modifiers);
+      
 			return this;
 		}
 
@@ -125,22 +170,57 @@ namespace VerbalExpression.Net
 			return this;
 		}
 
-		public VerbalExpressions Range(object[] args)
+		public VerbalExpressions Range(params object[] args)
 		{
-			string value = "[";
-			for (int _from = 0; _from < args.Length; _from += 2)
-			{
-				int _to = _from + 1;
-				if (args.Length <= _to) break;
-				string from = Sanitize((string)args[_from]);
-				string to = Sanitize((string)args[_to]);
+      if (object.ReferenceEquals(args,null))
+      {
+        throw new ArgumentNullException("args parameter must not be null");
+      }
 
-				value += from + "-" + to;
-			}
+      if (args.Length == 1)
+      {
+        throw new ArgumentOutOfRangeException("range must have at least 2 values");
+      }
 
-			value += "]";
+      string[] sanitizedStrings = args.Select(argument =>
+          {
+            if (object.ReferenceEquals(argument,null))
+            {
+              return string.Empty;
+            }
 
-			Add(value);
+            string casted = argument.ToString();
+            if (string.IsNullOrEmpty(casted))
+            {
+              return string.Empty;
+            }
+            else
+            {
+              return Sanitize(casted);
+            }
+          })
+          .Where(sanitizedString => !string.IsNullOrEmpty(sanitizedString))
+          .OrderBy(s=>s)
+          .ToArray();
+
+      if (!sanitizedStrings.Any())
+      {
+        return this;
+      }
+
+      StringBuilder sb = new StringBuilder("[");
+      for (int _from = 0; _from < sanitizedStrings.Length; _from += 2)
+      {
+        int _to = _from + 1;
+        if (sanitizedStrings.Length <= _to)
+        {
+          break;
+        }
+        sb.AppendFormat("{0}-{1}", sanitizedStrings[_from], sanitizedStrings[_to]);
+      }
+      sb.Append("]");
+
+			Add(sb.ToString());
 			return this;
 		}
 
@@ -274,6 +354,7 @@ namespace VerbalExpression.Net
 		{
 			Add(string.Empty);
 			return patternRegex.ToString();
-		}
-	}
+    }
+    #endregion Public Methods
+  }
 }
