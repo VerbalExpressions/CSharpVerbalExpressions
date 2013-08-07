@@ -16,7 +16,7 @@ using System.Text;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace VerbalExpression.Net
+namespace CSharpVerbalExpressions
 {
     public class VerbalExpressions
     {
@@ -34,7 +34,6 @@ namespace VerbalExpression.Net
         private string _prefixes = "";
         private string _source = "";
         private string _suffixes = "";
-
         private RegexOptions _modifiers = RegexOptions.Multiline;
         #endregion Private Members
 
@@ -82,26 +81,48 @@ namespace VerbalExpression.Net
                 throw new ArgumentNullException("value must be provided");
             }
 
+            return Add(value, true);
+        }
+       
+        public VerbalExpressions Add(CommonRegex commonRegex)
+        {
+            return Add(commonRegex.ToString(), false);
+        }
+
+        public VerbalExpressions Add(string value, bool sanitize = true)
+        {
+            value = sanitize ? Sanitize(value) : value;
             _source += value;
             return this;
         }
 
         public VerbalExpressions StartOfLine(bool enable = true)
         {
-            _prefixes = enable ? "^" : "";
+            _prefixes = enable ? "^" : string.Empty;
             return this;
         }
 
         public VerbalExpressions EndOfLine(bool enable = true)
         {
-            _suffixes = enable ? "$" : "";
+            _suffixes = enable ? "$" : string.Empty;
             return this;
         }
 
         public VerbalExpressions Then(string value)
         {
             value = string.Format("({0})", Sanitize(value));
-            return Add(value);
+            return Then(value,false);
+        }
+
+        public VerbalExpressions Then(string value, bool sanitize)
+        {
+            value = sanitize ? Sanitize(value) : value;
+            return Add(value, false);
+        }
+
+        public VerbalExpressions Then(CommonRegex commonRegex)
+        {
+            return Then(commonRegex.ToString(), false);
         }
 
         public VerbalExpressions Find(string value)
@@ -112,36 +133,52 @@ namespace VerbalExpression.Net
         public VerbalExpressions Maybe(string value)
         {
             value = string.Format("({0})?",Sanitize(value));
-            return Add(value);
+            return Add(value,false);
+        }
+
+        public VerbalExpressions Maybe(string value, bool sanitize)
+        {
+            value = sanitize ? Sanitize(value) : value;
+            return Maybe(value);
+        }
+
+        public VerbalExpressions Maybe(CommonRegex commonRegex)
+        {
+            return Maybe(commonRegex.ToString(), sanitize: false);
         }
 
         public VerbalExpressions Anything()
         {
-            return Add("(.*)");
+            return Add("(.*)",false);
         }
 
         public VerbalExpressions AnythingBut(string value)
         {
-            value = string.Format("([^{0}]*)", Sanitize(value));
-            return Add(value);
+            return AnythingBut(value, true);
+        }
+
+        public VerbalExpressions AnythingBut(string value, bool sanitize)
+        {
+            value = sanitize ? Sanitize(value) : value;
+            value = string.Format("([^{0}]*)", value);
+            return Add(value,false);
         }
 
         public VerbalExpressions Replace(string value)
         {
             string whereToReplace = PatternRegex.ToString();
 
-            if (whereToReplace.Length == 0)
+            if (whereToReplace.Length != 0)
             {
-                return this;
+                _source.Replace(whereToReplace, value);
             }
 
-            _source.Replace(whereToReplace, value);
             return this;
         }
 
         public VerbalExpressions LineBreak()
         {
-            return Add(@"(\n|(\r\n))");
+            return Add(@"(\n|(\r\n))", false);
         }
 
         public VerbalExpressions Br()
@@ -156,13 +193,13 @@ namespace VerbalExpression.Net
 
         public VerbalExpressions Word()
         {
-            return Add(@"\w+");
+            return Add(@"\w+", false);
         }
 
         public VerbalExpressions AnyOf(string value)
         {
             value = string.Format("[{0}]",Sanitize(value));
-            return Add(value);
+            return Add(value, false);
         }
 
         public VerbalExpressions Any(string value)
@@ -209,8 +246,7 @@ namespace VerbalExpression.Net
             }
 
             bool hasOddNumberOfParams = (sanitizedStrings.Length % 2) > 0;
-
-
+            
             StringBuilder sb = new StringBuilder("[");
             for (int _from = 0; _from < sanitizedStrings.Length; _from += 2)
             {
@@ -228,8 +264,7 @@ namespace VerbalExpression.Net
                 sb.AppendFormat("|{0}", sanitizedStrings.Last());
             }
 
-            Add(sb.ToString());
-            return this;
+            return Add(sb.ToString(),false);
         }
 
         public VerbalExpressions AddModifier(char modifier)
@@ -303,7 +338,7 @@ namespace VerbalExpression.Net
             return this;
         }
 
-        public VerbalExpressions SearchOneLine(bool enable = true)
+        public VerbalExpressions SearchOneLine(bool enable)
         {
             if (enable)
                 RemoveModifier('m');
@@ -325,19 +360,30 @@ namespace VerbalExpression.Net
                     break;
             }
 
+
             return Add(value);
         }
 
         public VerbalExpressions Or(string value)
+        {
+            return Or(value, true);
+        }
+
+        public VerbalExpressions Or(CommonRegex commonRegex)
+        {
+            return Or(commonRegex.ToString(),false);
+        }
+
+        public VerbalExpressions Or(string value, bool sanitize)
         {
             if (_prefixes.IndexOf("(") == -1)
                 _prefixes += "(";
             if (_suffixes.IndexOf(")") == -1)
                 _suffixes = ")" + _suffixes;
 
-            Add(")|(");
-            if (value != null) Then(value);
-            return this;
+            _source += ")|(";
+
+            return Add(value, sanitize);
         }
 
         public VerbalExpressions WithOptions(RegexOptions options)
