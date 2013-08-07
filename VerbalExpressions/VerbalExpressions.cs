@@ -73,17 +73,7 @@ namespace CSharpVerbalExpressions
 
             return Regex.Escape(value);
         }
-
-        public VerbalExpressions Add(string value)
-        {
-            if (object.ReferenceEquals(value, null))
-            {
-                throw new ArgumentNullException("value must be provided");
-            }
-
-            return Add(value, true);
-        }
-       
+      
         public VerbalExpressions Add(CommonRegex commonRegex)
         {
             return Add(commonRegex.ToString(), false);
@@ -91,6 +81,9 @@ namespace CSharpVerbalExpressions
 
         public VerbalExpressions Add(string value, bool sanitize = true)
         {
+            if (value == null)
+                throw new ArgumentNullException("value must be provided");
+
             value = sanitize ? Sanitize(value) : value;
             _source += value;
             return this;
@@ -108,15 +101,10 @@ namespace CSharpVerbalExpressions
             return this;
         }
 
-        public VerbalExpressions Then(string value)
+        public VerbalExpressions Then(string value, bool sanitize = true)
         {
-            value = string.Format("({0})", Sanitize(value));
-            return Then(value,false);
-        }
-
-        public VerbalExpressions Then(string value, bool sanitize)
-        {
-            value = sanitize ? Sanitize(value) : value;
+            var sanitizedValue = sanitize ? Sanitize(value) : value;
+            value = string.Format("({0})", sanitizedValue);
             return Add(value, false);
         }
 
@@ -130,16 +118,11 @@ namespace CSharpVerbalExpressions
             return Then(value);
         }
 
-        public VerbalExpressions Maybe(string value)
-        {
-            value = string.Format("({0})?",Sanitize(value));
-            return Add(value,false);
-        }
-
-        public VerbalExpressions Maybe(string value, bool sanitize)
+        public VerbalExpressions Maybe(string value, bool sanitize = true)
         {
             value = sanitize ? Sanitize(value) : value;
-            return Maybe(value);
+            value = string.Format("({0})?", Sanitize(value));
+            return Add(value, false);
         }
 
         public VerbalExpressions Maybe(CommonRegex commonRegex)
@@ -152,12 +135,7 @@ namespace CSharpVerbalExpressions
             return Add("(.*)",false);
         }
 
-        public VerbalExpressions AnythingBut(string value)
-        {
-            return AnythingBut(value, true);
-        }
-
-        public VerbalExpressions AnythingBut(string value, bool sanitize)
+        public VerbalExpressions AnythingBut(string value, bool sanitize = true)
         {
             value = sanitize ? Sanitize(value) : value;
             value = string.Format("([^{0}]*)", value);
@@ -361,12 +339,7 @@ namespace CSharpVerbalExpressions
             }
 
 
-            return Add(value);
-        }
-
-        public VerbalExpressions Or(string value)
-        {
-            return Or(value, true);
+            return Add(value, false);
         }
 
         public VerbalExpressions Or(CommonRegex commonRegex)
@@ -374,7 +347,7 @@ namespace CSharpVerbalExpressions
             return Or(commonRegex.ToString(),false);
         }
 
-        public VerbalExpressions Or(string value, bool sanitize)
+        public VerbalExpressions Or(string value, bool sanitize = true)
         {
             if (_prefixes.IndexOf("(") == -1)
                 _prefixes += "(";
