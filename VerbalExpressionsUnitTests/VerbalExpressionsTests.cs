@@ -374,5 +374,58 @@ namespace VerbalExpressionsUnitTests
             Assert.IsTrue(verbEx.IsMatch("http://www.google.com"), "Should match url address");
         }
 
+        [TestMethod]
+        public void StartOfLine_WhenPlacedInRandomCallOrder_ShouldAppendAtTheBeginningOfTheExpression()
+        {
+            verbEx.Add("test")
+                .Add("ing")
+                .StartOfLine();
+
+            string text = "testing1234";
+            Assert.IsTrue(verbEx.IsMatch(text), "Should match that the text starts with test");
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Multiple_WhenNullOrEmptyValueParameterIsPassed_ShouldThrowArgumentException()
+        {
+            //Arrange
+            string value = null;
+
+            //Act
+            //Assert
+            verbEx.Multiple(value);
+        }
+
+        [TestMethod]
+        public void Multiple_WhenParamIsGiven_ShouldMatchOneOrMultipleValuesGiven()
+        {
+            //Arrange
+            string text = "testesting 123 yahoahoahou another test";
+            string expectedExpression = "y(aho)+u";
+            //Act
+            verbEx.Add("y")
+                .Multiple("aho")
+                .Add("u");
+
+            //Assert
+            Assert.IsTrue(verbEx.Test(text));
+            Assert.AreEqual<string>(expectedExpression, verbEx.ToString());
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void AnyOf_WhenValueParameterIsNullOrEmpty_ShouldThrowArgumentException()
+        {
+            string value = null;
+            verbEx.AnyOf(value);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Any_WhenValueParameterIsNullOrEmpty_ShouldThrowArgumentException()
+        {
+            string value = null;
+            verbEx.Any(value);
+        }
     }
 }

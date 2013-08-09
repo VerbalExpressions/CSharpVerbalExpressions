@@ -196,10 +196,22 @@ namespace CSharpVerbalExpressions
             return Add(@"\w+", false);
         }
 
+
+        public VerbalExpressions AnyOf(string value,bool sanitize)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                throw new ArgumentNullException("value must not be null");
+            }
+
+            value = sanitize ? Sanitize(value) : value;
+            value = string.Format("[{0}]", Sanitize(value));
+            return Add(value, false);
+        }
+
         public VerbalExpressions AnyOf(string value)
         {
-            value = string.Format("[{0}]",Sanitize(value));
-            return Add(value, false);
+            return this.AnyOf(value, true);
         }
 
         public VerbalExpressions Any(string value)
@@ -349,19 +361,20 @@ namespace CSharpVerbalExpressions
 
         public VerbalExpressions Multiple(string value)
         {
-            value = Sanitize(value);
-            switch (value[0])
+            return Multiple(value, true);
+        }
+
+        public VerbalExpressions Multiple(string value, bool sanitize)
+        {
+            if (string.IsNullOrEmpty(value))
             {
-                case '*':
-                case '+':
-                    break;
-                default:
-                    value += '+';
-                    break;
+                throw new ArgumentNullException("value must be provided");
             }
 
+            value = sanitize ? this.Sanitize(value) : value;
+            value = string.Format(@"({0})+", value);
 
-            return Add(value);
+            return Add(value, false);
         }
 
         public VerbalExpressions Or(string value)
