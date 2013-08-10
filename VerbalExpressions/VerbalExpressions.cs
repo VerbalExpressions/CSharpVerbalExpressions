@@ -21,7 +21,11 @@ namespace CSharpVerbalExpressions
     public class VerbalExpressions
     {
         #region Statics
-        public static VerbalExpressions NewExpression
+        /// <summary>
+        /// Returns a default instance of VerbalExpressions
+        /// having the Multiline option enabled
+        /// </summary>
+        public static VerbalExpressions DefaultExpression
         {
             get
             {
@@ -64,21 +68,50 @@ namespace CSharpVerbalExpressions
         #endregion Constructors
 
         #region Public Methods
+
+        #region Helpers
         public string Sanitize(string value)
         {
             if (string.IsNullOrEmpty(value))
             {
-                throw new ArgumentNullException("value must be provided");
+                throw new ArgumentNullException("value");
             }
 
             return Regex.Escape(value);
         }
-      
+
+        public bool Test(string toTest)
+        {
+            return IsMatch(toTest);
+        }
+        public bool IsMatch(string toTest)
+        {
+            return PatternRegex.IsMatch(toTest);
+        }
+        public Regex ToRegex()
+        {
+            return PatternRegex;
+        }
+        public override string ToString()
+        {
+            return PatternRegex.ToString();
+        }
+        #endregion Helpers
+
+        #region Expression Modifiers
+        public VerbalExpressions Add(string value)
+        {
+            if (object.ReferenceEquals(value, null))
+            {
+                throw new ArgumentNullException("value");
+            }
+
+            return Add(value, true);
+        }
         public VerbalExpressions Add(CommonRegex commonRegex)
         {
-            return Add(commonRegex.ToString(), false);
+            return Add(commonRegex.Name, false);
         }
-
         public VerbalExpressions Add(string value, bool sanitize = true)
         {
             if (value == null)
@@ -88,60 +121,64 @@ namespace CSharpVerbalExpressions
             _source += value;
             return this;
         }
-
         public VerbalExpressions StartOfLine(bool enable = true)
         {
             _prefixes = enable ? "^" : string.Empty;
             return this;
         }
-
         public VerbalExpressions EndOfLine(bool enable = true)
         {
             _suffixes = enable ? "$" : string.Empty;
             return this;
         }
-
-        public VerbalExpressions Then(string value, bool sanitize = true)
+        public VerbalExpressions Then(string value)
+        {
+            value = string.Format("({0})", Sanitize(value));
+            return Then(value,false);
+        }
+        public VerbalExpressions Then(string value, bool sanitize)
         {
             var sanitizedValue = sanitize ? Sanitize(value) : value;
             value = string.Format("({0})", sanitizedValue);
             return Add(value, false);
         }
-
         public VerbalExpressions Then(CommonRegex commonRegex)
         {
-            return Then(commonRegex.ToString(), false);
+            return Then(commonRegex.Name, false);
         }
-
         public VerbalExpressions Find(string value)
         {
             return Then(value);
         }
-
-        public VerbalExpressions Maybe(string value, bool sanitize = true)
+        public VerbalExpressions Maybe(string value)
+        {
+            value = string.Format("({0})?",Sanitize(value));
+            return Add(value,false);
+        }
+        public VerbalExpressions Maybe(string value, bool sanitize)
         {
             value = sanitize ? Sanitize(value) : value;
             value = string.Format("({0})?", Sanitize(value));
             return Add(value, false);
         }
-
         public VerbalExpressions Maybe(CommonRegex commonRegex)
         {
-            return Maybe(commonRegex.ToString(), sanitize: false);
+            return Maybe(commonRegex.Name, sanitize: false);
         }
-
         public VerbalExpressions Anything()
         {
             return Add("(.*)",false);
         }
-
-        public VerbalExpressions AnythingBut(string value, bool sanitize = true)
+        public VerbalExpressions AnythingBut(string value)
+        {
+            return AnythingBut(value, true);
+        }
+        public VerbalExpressions AnythingBut(string value, bool sanitize)
         {
             value = sanitize ? Sanitize(value) : value;
             value = string.Format("([^{0}]*)", value);
             return Add(value,false);
         }
-
         public VerbalExpressions Replace(string value)
         {
             string whereToReplace = PatternRegex.ToString();
@@ -153,51 +190,54 @@ namespace CSharpVerbalExpressions
 
             return this;
         }
-
         public VerbalExpressions LineBreak()
         {
             return Add(@"(\n|(\r\n))", false);
         }
-
         public VerbalExpressions Br()
         {
             return LineBreak();
         }
-
         public VerbalExpressions Tab()
         {
             return Add(@"\t");
         }
-
         public VerbalExpressions Word()
         {
             return Add(@"\w+", false);
         }
-
-        public VerbalExpressions AnyOf(string value)
+        public VerbalExpressions AnyOf(string value,bool sanitize)
         {
-            value = string.Format("[{0}]",Sanitize(value));
+            if (string.IsNullOrEmpty(value))
+            {
+                throw new ArgumentNullException("value");
+            }
+
+            value = sanitize ? Sanitize(value) : value;
+            value = string.Format("[{0}]", Sanitize(value));
             return Add(value, false);
         }
-
+        public VerbalExpressions AnyOf(string value)
+        {
+            return this.AnyOf(value, true);
+        }
         public VerbalExpressions Any(string value)
         {
             return AnyOf(value);
         }
-
-        public VerbalExpressions Range(params object[] args)
+        public VerbalExpressions Range(params object[] arguments)
         {
-            if (object.ReferenceEquals(args, null))
+            if (object.ReferenceEquals(arguments, null))
             {
-                throw new ArgumentNullException("args parameter must not be null");
+                throw new ArgumentNullException("arguments");
             }
 
-            if (args.Length == 1)
+            if (arguments.Length == 1)
             {
-                throw new ArgumentOutOfRangeException("range must have at least 2 values");
+                throw new ArgumentOutOfRangeException("arguments");
             }
             
-            string[] sanitizedStrings = args.Select(argument =>
+            string[] sanitizedStrings = arguments.Select(argument =>
                 {
                     if (object.ReferenceEquals(argument, null))
                     {
@@ -244,7 +284,44 @@ namespace CSharpVerbalExpressions
 
             return Add(sb.ToString(),false);
         }
+        public VerbalExpressions Multiple(string value)
+        {
+            return Multiple(value, true);
+        }
+        public VerbalExpressions Multiple(string value, bool sanitize)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                throw new ArgumentNullException("value");
+            }
 
+            value = sanitize ? this.Sanitize(value) : value;
+            value = string.Format(@"({0})+", value);
+
+            return Add(value, false);
+        }
+        public VerbalExpressions Or(string value)
+        {
+            return Or(value, true);
+        }
+        public VerbalExpressions Or(CommonRegex commonRegex)
+        {
+            return Or(commonRegex.Name,false);
+        }
+        public VerbalExpressions Or(string value, bool sanitize)
+        {
+            if (_prefixes.IndexOf("(") == -1)
+                _prefixes += "(";
+            if (_suffixes.IndexOf(")") == -1)
+                _suffixes = ")" + _suffixes;
+
+            _source += ")|(";
+
+            return Add(value, sanitize);
+        }
+        #endregion Expression Modifiers
+
+        #region Expression Options Modifiers
         public VerbalExpressions AddModifier(char modifier)
         {
             switch (modifier)
@@ -274,7 +351,6 @@ namespace CSharpVerbalExpressions
 
             return this;
         }
-
         public VerbalExpressions RemoveModifier(char modifier)
         {
             switch (modifier)
@@ -306,84 +382,37 @@ namespace CSharpVerbalExpressions
 
             return this;
         }
-
         public VerbalExpressions WithAnyCase(bool enable = true)
         {
             if (enable)
+            {
                 AddModifier('i');
+            }
             else
+            {
                 RemoveModifier('i');
+            }
             return this;
         }
-
-        public VerbalExpressions SearchOneLine(bool enable)
+        public VerbalExpressions UseOneLineSearchOption(bool enable)
         {
             if (enable)
-                RemoveModifier('m');
-            else
-                AddModifier('m');
-            return this;
-        }
-
-        public VerbalExpressions Multiple(string value)
-        {
-            value = Sanitize(value);
-            switch (value[0])
             {
-                case '*':
-                case '+':
-                    break;
-                default:
-                    value += '+';
-                    break;
+                RemoveModifier('m');
+            }
+            else
+            {
+                AddModifier('m');
             }
 
-
-            return Add(value, false);
+            return this;
         }
-
-        public VerbalExpressions Or(CommonRegex commonRegex)
-        {
-            return Or(commonRegex.ToString(),false);
-        }
-
-        public VerbalExpressions Or(string value, bool sanitize = true)
-        {
-            if (_prefixes.IndexOf("(") == -1)
-                _prefixes += "(";
-            if (_suffixes.IndexOf(")") == -1)
-                _suffixes = ")" + _suffixes;
-
-            _source += ")|(";
-
-            return Add(value, sanitize);
-        }
-
         public VerbalExpressions WithOptions(RegexOptions options)
         {
             this._modifiers = options;
             return this;
         }
-
-        public bool Test(string toTest)
-        {
-            return IsMatch(toTest);
-        }
-
-        public bool IsMatch(string toTest)
-        {
-            return PatternRegex.IsMatch(toTest);
-        }
-
-        public Regex ToRegex()
-        {
-            return PatternRegex;
-        }
-
-        public override string ToString()
-        {
-            return PatternRegex.ToString();
-        }
+        #endregion Expression Options Modifiers
         #endregion Public Methods
     }
 }

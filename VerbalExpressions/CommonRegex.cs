@@ -14,6 +14,23 @@ namespace CSharpVerbalExpressions
         private readonly int value;
         #endregion Private Members
 
+        #region Public Properties
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+        }
+        public int Value
+        {
+            get
+            {
+                return value;
+            }
+        }
+        #endregion Public Properties
+
         #region Statics
         public static readonly CommonRegex Url = new CommonRegex(1, @"((([A-Za-z]{3,9}:(?:\/\/)?)(?:[^-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(:[0-9]+)?|(?:ww‌​w.|[^-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w-_]*)?\??(?:[-\+=&;%@.\w_]*)#?‌​(?:[\w]*))?)");
         public static readonly CommonRegex Email = new CommonRegex(2, @"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}");
@@ -29,17 +46,5 @@ namespace CSharpVerbalExpressions
         {
         }
         #endregion Constructors
-
-        #region Public Methods
-        public int ToSwitchableValue()
-        {
-            return value;
-        }
-
-        public override String ToString()
-        {
-            return name;
-        }
-        #endregion Public Methods
     }
 }
