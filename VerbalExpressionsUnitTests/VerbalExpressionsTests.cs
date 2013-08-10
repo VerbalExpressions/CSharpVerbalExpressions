@@ -13,7 +13,7 @@ namespace VerbalExpressionsUnitTests
         [TestInitialize]
         public void Initialize()
         {
-            verbEx = VerbalExpressions.NewExpression;
+            verbEx = VerbalExpressions.DefaultExpression;
         }
 
         [TestCleanup]
@@ -25,7 +25,7 @@ namespace VerbalExpressionsUnitTests
         [TestMethod]
         public void TestingIfWeHaveAValidURL()
         {
-            verbEx = VerbalExpressions.NewExpression
+            verbEx = VerbalExpressions.DefaultExpression
                         .StartOfLine()
                         .Then("http")
                         .Maybe("s")
@@ -369,7 +369,6 @@ namespace VerbalExpressionsUnitTests
             verbEx.Add(CommonRegex.Url)
                 .Or(CommonRegex.Email);
 
-            Console.WriteLine(verbEx);
             Assert.IsTrue(verbEx.IsMatch("test@github.com"), "Should match email address");
             Assert.IsTrue(verbEx.IsMatch("http://www.google.com"), "Should match url address");
         }
@@ -417,15 +416,98 @@ namespace VerbalExpressionsUnitTests
         [ExpectedException(typeof(ArgumentNullException))]
         public void AnyOf_WhenValueParameterIsNullOrEmpty_ShouldThrowArgumentException()
         {
+            //Arrange
             string value = null;
+
+            //Act
+            //Assert
             verbEx.AnyOf(value);
         }
         [TestMethod]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Any_WhenValueParameterIsNullOrEmpty_ShouldThrowArgumentException()
         {
+            //Arrange
             string value = null;
+
+            //Act
+            //Assert
             verbEx.Any(value);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void Find_WhenNullParameterValueIsPassed_ThrowsArgumentException()
+        {
+            //Arrange
+            string value = null;
+
+            //Act
+            //Assert
+            verbEx.Find(value);
+        }
+
+        [TestMethod]
+        public void LineBreak_WhenCalled_ReturnsExpectedExpression()
+        {
+            //Arrange
+            string text = string.Format("testin with {0} line break",Environment.NewLine);
+
+            //Act
+            verbEx.LineBreak();
+            //Assert
+            Assert.IsTrue(verbEx.Test(text));
+        }
+
+        [TestMethod]
+        public void Br_WhenCalled_ReturnsExpectedExpression()
+        {
+            //Arrange
+            string text = string.Format("testin with {0} line break", Environment.NewLine);
+
+            //Act
+            verbEx.Br();
+            //Assert
+            Assert.IsTrue(verbEx.Test(text));
+        }
+
+        [TestMethod]
+        public void Tab_WhenCalled_ReturnsExpectedExpression()
+        {
+            //Arrange
+            string text = string.Format("text that contains {0} a tab",@"\t");
+
+            //Act
+            verbEx.Tab();
+
+            //Assert
+            Assert.IsTrue(verbEx.Test(text));
+        }
+
+        [TestMethod]
+        public void Word_WhenCalled_ReturnsExpectedNumberOfWords()
+        {
+            //Arrange
+            string text = "three words here";
+            int expectedCount = 3;
+            
+            //Act
+            verbEx.Word();
+            Regex currentExpression = verbEx.ToRegex();
+            int result = currentExpression.Matches(text).Count;
+
+            //Assert
+            Assert.AreEqual<int>(expectedCount, result);
+        }
+
+        [TestMethod]
+        public void UseOneLineSearchOption_WhenCalled_ShouldChangeMultilineModifier()
+        {
+            //Arrange
+
+            //Act
+
+            //Assert
         }
     }
 }
