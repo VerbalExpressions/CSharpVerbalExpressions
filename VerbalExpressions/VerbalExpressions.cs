@@ -79,6 +79,7 @@ namespace CSharpVerbalExpressions
 
             return Regex.Escape(value);
         }
+
         public bool Test(string toTest)
         {
             return IsMatch(toTest);
@@ -113,6 +114,9 @@ namespace CSharpVerbalExpressions
         }
         public VerbalExpressions Add(string value, bool sanitize = true)
         {
+            if (value == null)
+                throw new ArgumentNullException("value must be provided");
+
             value = sanitize ? Sanitize(value) : value;
             _source += value;
             return this;
@@ -134,7 +138,8 @@ namespace CSharpVerbalExpressions
         }
         public VerbalExpressions Then(string value, bool sanitize)
         {
-            value = sanitize ? Sanitize(value) : value;
+            var sanitizedValue = sanitize ? Sanitize(value) : value;
+            value = string.Format("({0})", sanitizedValue);
             return Add(value, false);
         }
         public VerbalExpressions Then(CommonRegex commonRegex)
@@ -153,7 +158,8 @@ namespace CSharpVerbalExpressions
         public VerbalExpressions Maybe(string value, bool sanitize)
         {
             value = sanitize ? Sanitize(value) : value;
-            return Maybe(value);
+            value = string.Format("({0})?", Sanitize(value));
+            return Add(value, false);
         }
         public VerbalExpressions Maybe(CommonRegex commonRegex)
         {
@@ -379,9 +385,13 @@ namespace CSharpVerbalExpressions
         public VerbalExpressions WithAnyCase(bool enable = true)
         {
             if (enable)
+            {
                 AddModifier('i');
+            }
             else
+            {
                 RemoveModifier('i');
+            }
             return this;
         }
         public VerbalExpressions UseOneLineSearchOption(bool enable)
@@ -394,6 +404,7 @@ namespace CSharpVerbalExpressions
             {
                 AddModifier('m');
             }
+
             return this;
         }
         public VerbalExpressions WithOptions(RegexOptions options)
