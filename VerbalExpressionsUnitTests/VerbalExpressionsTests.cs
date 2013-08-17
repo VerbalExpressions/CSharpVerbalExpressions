@@ -504,10 +504,83 @@ namespace VerbalExpressionsUnitTests
         public void UseOneLineSearchOption_WhenCalled_ShouldChangeMultilineModifier()
         {
             //Arrange
+            verbEx.UseOneLineSearchOption(false);
+            var regex = verbEx.ToRegex();
+            Assert.IsTrue(regex.Options.HasFlag(RegexOptions.Multiline), "RegexOptions should now be present");
+            //Act
+            verbEx.UseOneLineSearchOption(true);
+            //Assert
+            regex = verbEx.ToRegex();
+            Assert.IsFalse(regex.Options.HasFlag(RegexOptions.Multiline), "RegexOptions should now have been removed");
+        }
+
+        [TestMethod]
+        public void Maybe_WhenCalled_UsesCommonRegexUrl()
+        {
+            verbEx.Maybe(CommonRegex.Url);
+
+            Assert.IsTrue(verbEx.IsMatch("http://www.google.com"), "Should match url address");
+        }
+
+        [TestMethod]
+        public void Maybe_WhenCalled_UsesCommonRegexEmail()
+        {
+            verbEx.Maybe(CommonRegex.Email);
+
+            Assert.IsTrue(verbEx.IsMatch("test@github.com"), "Should match email address");
+        }
+
+        [TestMethod]
+        public void AddModifier_AddModifierI_RemovesCase()
+        {
+            verbEx.Add("teststring")
+                .AddModifier('i');
+
+            Assert.IsTrue(verbEx.IsMatch("TESTSTRING"));
+
+        }
+
+        [TestMethod]
+        public void AddModifier_AddModifierX_IgnoreWhitspace()
+        {
+            verbEx.Add("test string")
+                  .AddModifier('x');
+
+            Assert.IsTrue(verbEx.IsMatch("test string #comment"));
+        }
+
+        [TestMethod]
+        public void AddModifier_AddModifierM_Multiline()
+        {
+            //Arrange
+            string text = string.Format("testin with {0} line break", Environment.NewLine);
 
             //Act
+            verbEx.AddModifier('m');
 
             //Assert
+            Assert.IsTrue(verbEx.Test(text));
         }
+
+        [TestMethod]
+        public void RemoveModifier_RemoveModifierI_RemovesCase()
+        {
+            verbEx.AddModifier('i');
+
+            verbEx.RemoveModifier('i');
+            var regex = verbEx.ToRegex();
+            Assert.IsFalse(regex.Options.HasFlag(RegexOptions.IgnoreCase), "RegexOptions should now have been removed");
+        }
+
+        [TestMethod]
+        public void RemoveModifier_RemoveModifierX_RemovesCase()
+        {
+            verbEx.AddModifier('x');
+
+            verbEx.RemoveModifier('x');
+            var regex = verbEx.ToRegex();
+            Assert.IsFalse(regex.Options.HasFlag(RegexOptions.IgnorePatternWhitespace), "RegexOptions should now have been removed");
+        }
+
     }
 }
