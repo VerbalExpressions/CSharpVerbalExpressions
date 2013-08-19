@@ -1,28 +1,16 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CSharpVerbalExpressions;
+using NUnit.Framework;
 
 namespace VerbalExpressionsUnitTests
 {
-    [TestClass]
+    [TestFixture]
     public class VerbalExpressionsTests
     {
         private VerbalExpressions verbEx = null;
 
-        [TestInitialize]
-        public void Initialize()
-        {
-            verbEx = VerbalExpressions.DefaultExpression;
-        }
-
-        [TestCleanup]
-        public void TearDown()
-        {
-            verbEx = null;
-        }
-
-        [TestMethod]
+        [Test]
         public void TestingIfWeHaveAValidURL()
         {
             verbEx = VerbalExpressions.DefaultExpression
@@ -39,16 +27,18 @@ namespace VerbalExpressionsUnitTests
             Assert.IsTrue(verbEx.Test(testMe), "The URL is incorrect");
         }    
 
-        [TestMethod]
+        [Test]
         public void StartOfLine_CreatesCorrectRegex()
         {
+            verbEx = VerbalExpressions.DefaultExpression;
             verbEx.StartOfLine();
             Assert.AreEqual("^", verbEx.ToString(), "missing start of line regex");
         }
         
-        [TestMethod]
+        [Test]
         public void StartOfLine_ThenHttpMaybeWww_DoesMatchHttpInStart()
         {
+            verbEx = VerbalExpressions.DefaultExpression;
             verbEx.StartOfLine()
                 .Then("http")
                 .Maybe("www");
@@ -57,9 +47,10 @@ namespace VerbalExpressionsUnitTests
             Assert.IsTrue(isMatch, "Should match http in start");
         }
 
-        [TestMethod]
+        [Test]
         public void StartOfLine_ThenHttpMaybeWww_DoesNotMatchWwwInStart()
         {
+            verbEx = VerbalExpressions.DefaultExpression;
             verbEx.StartOfLine()
                 .Then("http")
                 .Maybe("www");
@@ -68,9 +59,10 @@ namespace VerbalExpressionsUnitTests
             Assert.IsFalse(isMatch, "Should not match www in start");
         }
 
-        [TestMethod]
+        [Test]
         public void EndOfLine_AddDotComtEndOfLine_DoesMatchDotComInEnd()
         {
+            verbEx = VerbalExpressions.DefaultExpression;
             verbEx.Add(".com")
                 .EndOfLine();
 
@@ -78,9 +70,10 @@ namespace VerbalExpressionsUnitTests
             Assert.IsTrue(isMatch, "Should match '.com' in end");
         }
 
-        [TestMethod]
+        [Test]
         public void EndOfLine_AddDotComEndOfLine_DoesNotMatchSlashInEnd()
         {
+            verbEx = VerbalExpressions.DefaultExpression;
             verbEx.Add(".com")
                 .EndOfLine();
 
@@ -88,18 +81,20 @@ namespace VerbalExpressionsUnitTests
             Assert.IsFalse(isMatch, "Should not match '/' in end");
         }
 
-        [TestMethod]
+        [Test]
         public void Add_AddDotCom_DoesNotMatchGoogleComWithoutDot()
         {
+            verbEx = VerbalExpressions.DefaultExpression;
             verbEx.Add(".com");
 
             var isMatch = verbEx.IsMatch("http://www.googlecom/");
             Assert.IsFalse(isMatch, "Should not match 'ecom'");
         }
         
-        [TestMethod]
+        [Test]
         public void Or_AddComOrOrg_DoesMatchComAndOrg()
         {
+            verbEx = VerbalExpressions.DefaultExpression;
             verbEx.Add("com").Or("org");
 
             Console.WriteLine(verbEx);
@@ -107,17 +102,19 @@ namespace VerbalExpressionsUnitTests
             Assert.IsTrue(verbEx.IsMatch("com"), "Should match 'com'");
         }
         
-        [TestMethod]
+        [Test]
         public void Or_AddComOrOrg_RegexIsAsExpecteds()
         {
+            verbEx = VerbalExpressions.DefaultExpression;
             verbEx.Add("com").Or("org");
             
             Assert.AreEqual("(com)|(org)", verbEx.ToString());
         }
     
-        [TestMethod]
+        [Test]
         public void Anything_StartOfLineAnythingEndOfline_DoesMatchAnyThing()
         {
+            verbEx = VerbalExpressions.DefaultExpression;
             verbEx
                 .StartOfLine()
                 .Anything()
@@ -128,9 +125,10 @@ namespace VerbalExpressionsUnitTests
             Assert.IsTrue(isMatch, "Ooops, should match anything");
         }
 
-        [TestMethod]
+        [Test]
         public void WithAnyCase_AddwwwWithAnyCase_DoesMatchwWw()
         {
+            verbEx = VerbalExpressions.DefaultExpression;
             verbEx.Add("www")
                 .WithAnyCase();
 
@@ -139,9 +137,10 @@ namespace VerbalExpressionsUnitTests
             Assert.IsTrue(isMatch, "Should match any case");
         }
 
-        [TestMethod]
+        [Test]
         public void WithAnyCase_SetsCorrectIgnoreCaseRegexOptionAndHasMultiLineRegexOptionAsDefault()
         {
+            verbEx = VerbalExpressions.DefaultExpression;
             verbEx.WithAnyCase();
 
             var regex = verbEx.ToRegex();
@@ -149,9 +148,10 @@ namespace VerbalExpressionsUnitTests
             Assert.IsTrue(regex.Options.HasFlag(RegexOptions.Multiline), "RegexOptions should have MultiLine as default");
         }
 
-        [TestMethod]
+        [Test]
         public void RemoveModifier_RemoveModifierM_RemovesMulitilineAsDefault()
         {
+            verbEx = VerbalExpressions.DefaultExpression;
             var regex = verbEx.ToRegex();
             Assert.IsTrue(regex.Options.HasFlag(RegexOptions.Multiline), "RegexOptions should have MultiLine as default");
 
@@ -161,9 +161,10 @@ namespace VerbalExpressionsUnitTests
             Assert.IsFalse(regex.Options.HasFlag(RegexOptions.Multiline), "RegexOptions should now have been removed");
         }
 
-        [TestMethod]
+        [Test]
         public void WithAnyCase_AddwwwWithAnyCaseFalse_DoesNotMatchwWw()
         {
+            verbEx = VerbalExpressions.DefaultExpression;
             verbEx.Add("www")
                 .WithAnyCase(false);
 
@@ -172,11 +173,12 @@ namespace VerbalExpressionsUnitTests
             Assert.IsFalse(isMatch, "Should not match any case");
         }
 
-        [TestMethod]
+        [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Sanitize_Handles_Null_String()
         {
             //Arrange
+            verbEx = VerbalExpressions.DefaultExpression;
             string value = null;
 
             //Act
@@ -184,10 +186,11 @@ namespace VerbalExpressionsUnitTests
             value = verbEx.Sanitize(value);
         }
 
-        [TestMethod]
+        [Test]
         public void Sanitize_AddCharactersThatShouldBeEscaped_ReturnsEscapedString()
         {
             //Arrange
+            verbEx = VerbalExpressions.DefaultExpression;
             string value = "*+?";
             string result = string.Empty;
             string expected = @"\*\+\?";
@@ -196,14 +199,15 @@ namespace VerbalExpressionsUnitTests
             result = verbEx.Sanitize(value);
 
             //Assert
-            Assert.AreEqual<string>(expected, result);
+            Assert.AreEqual(expected, result);
         }
 
-        [TestMethod]
+        [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Add_WhenNullStringPassedAsParameter_ShouldThrowNullArgumentException()
         {
             //Arrange
+            verbEx = VerbalExpressions.DefaultExpression;
             string value = null;
 
             //Act
@@ -211,11 +215,12 @@ namespace VerbalExpressionsUnitTests
             verbEx.Add(value);
         }
 
-        [TestMethod]
+        [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Range_WhenNullParameterPassed_ShouldThrowArgumentNullException()
         {
             //Arrange
+            verbEx = VerbalExpressions.DefaultExpression;
             object[] value = null;
 
             //Act
@@ -223,11 +228,12 @@ namespace VerbalExpressionsUnitTests
             verbEx.Range(value);
         }
 
-        [TestMethod]
+        [Test]
         [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Range_WhenArrayParameterHasOnlyOneValue_ShouldThrowArgumentOutOfRangeException()
         {
             //Arrange
+            verbEx = VerbalExpressions.DefaultExpression;
             object[] value = new object[1] { 0 };
 
             //Act
@@ -235,10 +241,11 @@ namespace VerbalExpressionsUnitTests
             verbEx.Range(value);
         }
 
-        [TestMethod]
+        [Test]
         public void Range_WhenArrayParameterHasValuesInReverseOrder_ReturnsCorrectResultForCorrectOrder()
         {
             //Arrange
+            verbEx = VerbalExpressions.DefaultExpression;
             object[] inversedOrderArray = new object[2] { 9, 2 };
             verbEx.Range(inversedOrderArray);
             string lookupString = "testing 8 another test";
@@ -250,10 +257,11 @@ namespace VerbalExpressionsUnitTests
             Assert.IsTrue(isMatch);
         }
 
-        [TestMethod]
+        [Test]
         public void Range_WhenArrayContainsNullParameter_ItIsIgnoredAndRemovedFromList()
         {
             //Arrange
+            verbEx = VerbalExpressions.DefaultExpression;
             object[] inversedOrderArray = new object[4] { 1, null, null, 7 };
             verbEx.Range(inversedOrderArray);
             string lookupString = "testing 5 testing";
@@ -266,10 +274,11 @@ namespace VerbalExpressionsUnitTests
 
         }
 
-        [TestMethod]
+        [Test]
         public void Replace_WhenCalledImmediatelyAfteInitialize_ShouldNotThrowNullReferenceException()
         {
             //Arrange
+            verbEx = VerbalExpressions.DefaultExpression;
             string value = "value";
             bool hasThrownNullReferenceEx = false;
 
@@ -287,10 +296,11 @@ namespace VerbalExpressionsUnitTests
             Assert.IsFalse(hasThrownNullReferenceEx);
         }
 
-        [TestMethod]
+        [Test]
         public void Range_WhenOddNumberOfItemsInArray_ShouldAppendLastElementWithOrClause()
         {
             //Arrange
+            verbEx = VerbalExpressions.DefaultExpression;
             string text = "abcd7sdadqascdaswde";
             object[] range = new object[3] { 1, 6, 7 };
 
@@ -300,10 +310,11 @@ namespace VerbalExpressionsUnitTests
             Assert.IsTrue(verbEx.IsMatch(text));
         }
 
-        [TestMethod]
+        [Test]
         public void Range_WhenOddNumberOfItemsInArray_ShouldAppendWithPipe()
         {
             //Arrange
+            verbEx = VerbalExpressions.DefaultExpression;
             object[] range = new object[3] { 1, 6, 7 };
             string expectedExpression = "[1-6]|7";
 
@@ -311,14 +322,15 @@ namespace VerbalExpressionsUnitTests
             verbEx.Range(range);
 
             //Assert
-            Assert.AreEqual<string>(expectedExpression, verbEx.ToString());
+            Assert.AreEqual(expectedExpression, verbEx.ToString());
         }
 
-        [TestMethod]
+        [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Multiple_WhenNullArgumentPassed_ThrowsArgumentNullException()
         {
             //Arrange
+            verbEx = VerbalExpressions.DefaultExpression;
             string argument = string.Empty;
 
             //Act
@@ -326,27 +338,30 @@ namespace VerbalExpressionsUnitTests
             verbEx.Multiple(argument);
         }
     
-        [TestMethod]
+        [Test]
         public void Then_VerbalExpressionsEmail_DoesMatchEmail()
         {
+            verbEx = VerbalExpressions.DefaultExpression;
             verbEx.StartOfLine().Then(CommonRegex.Email);
             
             var isMatch = verbEx.IsMatch("test@github.com");
             Assert.IsTrue(isMatch, "Should match email address");
         }
         
-        [TestMethod]
+        [Test]
         public void Then_VerbalExpressionsEmail_DoesNotMatchUrl()
         {
+            verbEx = VerbalExpressions.DefaultExpression;
             verbEx.StartOfLine().Then(CommonRegex.Email);
             
             var isMatch = verbEx.IsMatch("http://www.google.com");
             Assert.IsFalse(isMatch, "Should not match url address");
         }
     
-        [TestMethod]
+        [Test]
         public void Then_VerbalExpressionsUrl_DoesMatchUrl()
         {
+            verbEx = VerbalExpressions.DefaultExpression;
             verbEx.StartOfLine()
                   .Then(CommonRegex.Url);
 
@@ -355,17 +370,19 @@ namespace VerbalExpressionsUnitTests
             Assert.IsTrue(verbEx.IsMatch("http://google.com"), "Should match url address");
         }	
 
-        [TestMethod]
+        [Test]
         public void Then_VerbalExpressionsUrl_DoesNotMatchEmail()
         {
+            verbEx = VerbalExpressions.DefaultExpression;
             verbEx.StartOfLine().Then(CommonRegex.Url);
 
             Assert.IsFalse(verbEx.IsMatch("test@github.com"), "Should not match email address");
         }
 
-        [TestMethod]
+        [Test]
         public void Or_VerbalExpressionsUrlOrVerbalExpressionEmail_DoesMatchEmailAndUrl()
         {
+            verbEx = VerbalExpressions.DefaultExpression;
             verbEx.Add(CommonRegex.Url)
                 .Or(CommonRegex.Email);
 
@@ -373,9 +390,10 @@ namespace VerbalExpressionsUnitTests
             Assert.IsTrue(verbEx.IsMatch("http://www.google.com"), "Should match url address");
         }
 
-        [TestMethod]
+        [Test]
         public void StartOfLine_WhenPlacedInRandomCallOrder_ShouldAppendAtTheBeginningOfTheExpression()
         {
+            verbEx = VerbalExpressions.DefaultExpression;
             verbEx.Add("test")
                 .Add("ing")
                 .StartOfLine();
@@ -384,11 +402,12 @@ namespace VerbalExpressionsUnitTests
             Assert.IsTrue(verbEx.IsMatch(text), "Should match that the text starts with test");
         }
 
-        [TestMethod]
+        [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Multiple_WhenNullOrEmptyValueParameterIsPassed_ShouldThrowArgumentException()
         {
             //Arrange
+            verbEx = VerbalExpressions.DefaultExpression;
             string value = null;
 
             //Act
@@ -396,10 +415,11 @@ namespace VerbalExpressionsUnitTests
             verbEx.Multiple(value);
         }
 
-        [TestMethod]
+        [Test]
         public void Multiple_WhenParamIsGiven_ShouldMatchOneOrMultipleValuesGiven()
         {
             //Arrange
+            verbEx = VerbalExpressions.DefaultExpression;
             string text = "testesting 123 yahoahoahou another test";
             string expectedExpression = "y(aho)+u";
             //Act
@@ -409,25 +429,27 @@ namespace VerbalExpressionsUnitTests
 
             //Assert
             Assert.IsTrue(verbEx.Test(text));
-            Assert.AreEqual<string>(expectedExpression, verbEx.ToString());
+            Assert.AreEqual(expectedExpression, verbEx.ToString());
         }
 
-        [TestMethod]
+        [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public void AnyOf_WhenValueParameterIsNullOrEmpty_ShouldThrowArgumentException()
         {
             //Arrange
+            verbEx = VerbalExpressions.DefaultExpression;
             string value = null;
 
             //Act
             //Assert
             verbEx.AnyOf(value);
         }
-        [TestMethod]
+        [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Any_WhenValueParameterIsNullOrEmpty_ShouldThrowArgumentException()
         {
             //Arrange
+            verbEx = VerbalExpressions.DefaultExpression;
             string value = null;
 
             //Act
@@ -435,11 +457,12 @@ namespace VerbalExpressionsUnitTests
             verbEx.Any(value);
         }
 
-        [TestMethod]
+        [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Find_WhenNullParameterValueIsPassed_ThrowsArgumentException()
         {
             //Arrange
+            verbEx = VerbalExpressions.DefaultExpression;
             string value = null;
 
             //Act
@@ -447,10 +470,11 @@ namespace VerbalExpressionsUnitTests
             verbEx.Find(value);
         }
 
-        [TestMethod]
+        [Test]
         public void LineBreak_WhenCalled_ReturnsExpectedExpression()
         {
             //Arrange
+            verbEx = VerbalExpressions.DefaultExpression;
             string text = string.Format("testin with {0} line break",Environment.NewLine);
 
             //Act
@@ -459,10 +483,11 @@ namespace VerbalExpressionsUnitTests
             Assert.IsTrue(verbEx.Test(text));
         }
 
-        [TestMethod]
+        [Test]
         public void Br_WhenCalled_ReturnsExpectedExpression()
         {
             //Arrange
+            verbEx = VerbalExpressions.DefaultExpression;
             string text = string.Format("testin with {0} line break", Environment.NewLine);
 
             //Act
@@ -471,10 +496,11 @@ namespace VerbalExpressionsUnitTests
             Assert.IsTrue(verbEx.Test(text));
         }
 
-        [TestMethod]
+        [Test]
         public void Tab_WhenCalled_ReturnsExpectedExpression()
         {
             //Arrange
+            verbEx = VerbalExpressions.DefaultExpression;
             string text = string.Format("text that contains {0} a tab",@"\t");
 
             //Act
@@ -484,10 +510,11 @@ namespace VerbalExpressionsUnitTests
             Assert.IsTrue(verbEx.Test(text));
         }
 
-        [TestMethod]
+        [Test]
         public void Word_WhenCalled_ReturnsExpectedNumberOfWords()
         {
             //Arrange
+            verbEx = VerbalExpressions.DefaultExpression;
             string text = "three words here";
             int expectedCount = 3;
             
@@ -497,10 +524,10 @@ namespace VerbalExpressionsUnitTests
             int result = currentExpression.Matches(text).Count;
 
             //Assert
-            Assert.AreEqual<int>(expectedCount, result);
+            Assert.AreEqual(expectedCount, result);
         }
 
-        [TestMethod]
+        [Test]
         public void UseOneLineSearchOption_WhenCalled_ShouldChangeMultilineModifier()
         {
             //Arrange
