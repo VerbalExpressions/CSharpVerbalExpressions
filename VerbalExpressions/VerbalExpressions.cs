@@ -59,7 +59,7 @@ namespace CSharpVerbalExpressions
 
         #region Constructors
 
-        private VerbalExpressions()
+        public VerbalExpressions()
         {
         }
 
