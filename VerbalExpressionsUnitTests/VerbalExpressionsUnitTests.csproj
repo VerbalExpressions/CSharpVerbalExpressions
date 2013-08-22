@@ -38,8 +38,19 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddTests.cs" />
+    <Compile Include="EndOfLineTests.cs" />
+    <Compile Include="MaybeTests.cs" />
+    <Compile Include="MultipleTests.cs" />
+    <Compile Include="OrTests.cs" />
+    <Compile Include="RangeTests.cs" />
+    <Compile Include="RemoveModifierTests.cs" />
+    <Compile Include="SanatizeTests.cs" />
+    <Compile Include="StartOfLineTests.cs" />
+    <Compile Include="ThenTests.cs" />
     <Compile Include="VerbalExpressionsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WithAnyCaseTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
