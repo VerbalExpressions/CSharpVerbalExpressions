@@ -12,8 +12,6 @@
     <description>Verbal Expressions is a small library that allows you to write regular expressions in natural language.</description>
     <releaseNotes>First release ever. Just testing how to package for NuGet.</releaseNotes>
     <copyright>Copyright 2013</copyright>
-    <tags>0.0.1</tags>
-    <dependencies>
-    </dependencies>
+    <tags>C# VerbalExpressions</tags>
   </metadata>
 </package>
