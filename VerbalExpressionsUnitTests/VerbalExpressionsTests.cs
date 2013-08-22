@@ -8,12 +8,10 @@ namespace VerbalExpressionsUnitTests
     [TestFixture]
     public class VerbalExpressionsTests
     {
-        private VerbalExpressions verbEx = null;
-
         [Test]
         public void TestingIfWeHaveAValidURL()
         {
-            verbEx = VerbalExpressions.DefaultExpression
+            var verbEx = VerbalExpressions.DefaultExpression
                         .StartOfLine()
                         .Then("http")
                         .Maybe("s")
@@ -25,13 +23,12 @@ namespace VerbalExpressionsUnitTests
             var testMe = "https://www.google.com";
 
             Assert.IsTrue(verbEx.Test(testMe), "The URL is incorrect");
-        }    
+        }
 
         [Test]
         public void Anything_StartOfLineAnythingEndOfline_DoesMatchAnyThing()
         {
-            verbEx = VerbalExpressions.DefaultExpression;
-            verbEx
+            var verbEx = VerbalExpressions.DefaultExpression
                 .StartOfLine()
                 .Anything()
                 .EndOfLine();
@@ -45,7 +42,7 @@ namespace VerbalExpressionsUnitTests
         public void Replace_WhenCalledImmediatelyAfteInitialize_ShouldNotThrowNullReferenceException()
         {
             //Arrange
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             string value = "value";
             bool hasThrownNullReferenceEx = false;
 
@@ -68,7 +65,7 @@ namespace VerbalExpressionsUnitTests
         public void AnyOf_WhenValueParameterIsNullOrEmpty_ShouldThrowArgumentException()
         {
             //Arrange
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             string value = null;
 
             //Act
@@ -80,7 +77,7 @@ namespace VerbalExpressionsUnitTests
         public void Any_WhenValueParameterIsNullOrEmpty_ShouldThrowArgumentException()
         {
             //Arrange
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             string value = null;
 
             //Act
@@ -93,7 +90,7 @@ namespace VerbalExpressionsUnitTests
         public void Find_WhenNullParameterValueIsPassed_ThrowsArgumentException()
         {
             //Arrange
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             string value = null;
 
             //Act
@@ -105,8 +102,8 @@ namespace VerbalExpressionsUnitTests
         public void LineBreak_WhenCalled_ReturnsExpectedExpression()
         {
             //Arrange
-            verbEx = VerbalExpressions.DefaultExpression;
-            string text = string.Format("testin with {0} line break",Environment.NewLine);
+            var verbEx = VerbalExpressions.DefaultExpression;
+            string text = string.Format("testin with {0} line break", Environment.NewLine);
 
             //Act
             verbEx.LineBreak();
@@ -118,7 +115,7 @@ namespace VerbalExpressionsUnitTests
         public void Br_WhenCalled_ReturnsExpectedExpression()
         {
             //Arrange
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             string text = string.Format("testin with {0} line break", Environment.NewLine);
 
             //Act
@@ -131,8 +128,8 @@ namespace VerbalExpressionsUnitTests
         public void Tab_WhenCalled_ReturnsExpectedExpression()
         {
             //Arrange
-            verbEx = VerbalExpressions.DefaultExpression;
-            string text = string.Format("text that contains {0} a tab",@"\t");
+            var verbEx = VerbalExpressions.DefaultExpression;
+            string text = string.Format("text that contains {0} a tab", @"\t");
 
             //Act
             verbEx.Tab();
@@ -145,10 +142,10 @@ namespace VerbalExpressionsUnitTests
         public void Word_WhenCalled_ReturnsExpectedNumberOfWords()
         {
             //Arrange
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             string text = "three words here";
             int expectedCount = 3;
-            
+
             //Act
             verbEx.Word();
             Regex currentExpression = verbEx.ToRegex();
@@ -162,6 +159,7 @@ namespace VerbalExpressionsUnitTests
         public void UseOneLineSearchOption_WhenCalled_ShouldChangeMultilineModifier()
         {
             //Arrange
+            var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.UseOneLineSearchOption(false);
             var regex = verbEx.ToRegex();
             Assert.IsTrue(regex.Options.HasFlag(RegexOptions.Multiline), "RegexOptions should now be present");

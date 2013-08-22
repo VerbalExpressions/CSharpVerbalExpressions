@@ -11,14 +11,12 @@ namespace VerbalExpressionsUnitTests
     [TestFixture]
     class MultipleTests
     {
-        private VerbalExpressions verbEx = null;
-
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Multiple_WhenNullOrEmptyValueParameterIsPassed_ShouldThrowArgumentException()
         {
             //Arrange
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             string value = null;
 
             //Act
@@ -30,7 +28,7 @@ namespace VerbalExpressionsUnitTests
         public void Multiple_WhenParamIsGiven_ShouldMatchOneOrMultipleValuesGiven()
         {
             //Arrange
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             string text = "testesting 123 yahoahoahou another test";
             string expectedExpression = "y(aho)+u";
             //Act
@@ -48,7 +46,7 @@ namespace VerbalExpressionsUnitTests
         public void Multiple_WhenNullArgumentPassed_ThrowsArgumentNullException()
         {
             //Arrange
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             string argument = string.Empty;
 
             //Act

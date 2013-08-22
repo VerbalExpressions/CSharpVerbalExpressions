@@ -11,12 +11,10 @@ namespace VerbalExpressionsUnitTests
     [TestFixture]
     class RemoveMofifierTests
     {
-        private VerbalExpressions verbEx = null;
-
         [Test]
         public void RemoveModifier_RemoveModifierM_RemovesMulitilineAsDefault()
         {
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             var regex = verbEx.ToRegex();
             Assert.IsTrue(regex.Options.HasFlag(RegexOptions.Multiline), "RegexOptions should have MultiLine as default");
 
@@ -29,6 +27,7 @@ namespace VerbalExpressionsUnitTests
         [Test]
         public void RemoveModifier_RemoveModifierI_RemovesCase()
         {
+            var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.AddModifier('i');
 
             verbEx.RemoveModifier('i');
@@ -39,6 +38,7 @@ namespace VerbalExpressionsUnitTests
         [Test]
         public void RemoveModifier_RemoveModifierX_RemovesCase()
         {
+            var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.AddModifier('x');
 
             verbEx.RemoveModifier('x');

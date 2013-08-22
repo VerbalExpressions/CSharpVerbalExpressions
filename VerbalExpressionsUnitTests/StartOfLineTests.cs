@@ -11,12 +11,10 @@ namespace VerbalExpressionsUnitTests
     [TestFixture]
     class StartOfLineTests
     {
-        private VerbalExpressions verbEx = null;
-
         [Test]
         public void StartOfLine_CreatesCorrectRegex()
         {
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.StartOfLine();
             Assert.AreEqual("^", verbEx.ToString(), "missing start of line regex");
         }
@@ -24,7 +22,7 @@ namespace VerbalExpressionsUnitTests
         [Test]
         public void StartOfLine_WhenPlacedInRandomCallOrder_ShouldAppendAtTheBeginningOfTheExpression()
         {
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.Add("test")
                 .Add("ing")
                 .StartOfLine();
@@ -36,7 +34,7 @@ namespace VerbalExpressionsUnitTests
         [Test]
         public void StartOfLine_ThenHttpMaybeWww_DoesMatchHttpInStart()
         {
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.StartOfLine()
                 .Then("http")
                 .Maybe("www");
@@ -48,7 +46,7 @@ namespace VerbalExpressionsUnitTests
         [Test]
         public void StartOfLine_ThenHttpMaybeWww_DoesNotMatchWwwInStart()
         {
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.StartOfLine()
                 .Then("http")
                 .Maybe("www");

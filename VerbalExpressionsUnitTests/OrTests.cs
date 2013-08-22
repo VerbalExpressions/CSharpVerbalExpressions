@@ -11,12 +11,10 @@ namespace VerbalExpressionsUnitTests
     [TestFixture]
     class OrTests
     {
-        private VerbalExpressions verbEx = null;
-
         [Test]
         public void Or_AddComOrOrg_DoesMatchComAndOrg()
         {
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.Add("com").Or("org");
 
             Console.WriteLine(verbEx);
@@ -27,7 +25,7 @@ namespace VerbalExpressionsUnitTests
         [Test]
         public void Or_AddComOrOrg_RegexIsAsExpecteds()
         {
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.Add("com").Or("org");
 
             Assert.AreEqual("(com)|(org)", verbEx.ToString());
@@ -36,7 +34,7 @@ namespace VerbalExpressionsUnitTests
         [Test]
         public void Or_VerbalExpressionsUrlOrVerbalExpressionEmail_DoesMatchEmailAndUrl()
         {
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.Add(CommonRegex.Url)
                 .Or(CommonRegex.Email);
 

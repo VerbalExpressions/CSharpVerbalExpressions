@@ -10,12 +10,10 @@ namespace VerbalExpressionsUnitTests
     [TestFixture]
     class EndOfLineTests
     {
-        VerbalExpressions verbEx = null;
-
         [Test]
         public void EndOfLine_AddDotComtEndOfLine_DoesMatchDotComInEnd()
         {
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.Add(".com")
                 .EndOfLine();
 
@@ -26,7 +24,7 @@ namespace VerbalExpressionsUnitTests
         [Test]
         public void EndOfLine_AddDotComEndOfLine_DoesNotMatchSlashInEnd()
         {
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.Add(".com")
                 .EndOfLine();
 

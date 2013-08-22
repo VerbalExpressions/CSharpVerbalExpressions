@@ -11,12 +11,10 @@ namespace VerbalExpressionsUnitTests
     [TestFixture]
     class WithAnyCaseTests
     {
-        private VerbalExpressions verbEx = null;
-
         [Test]
         public void WithAnyCase_AddwwwWithAnyCase_DoesMatchwWw()
         {
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.Add("www")
                 .WithAnyCase();
 
@@ -28,7 +26,7 @@ namespace VerbalExpressionsUnitTests
         [Test]
         public void WithAnyCase_SetsCorrectIgnoreCaseRegexOptionAndHasMultiLineRegexOptionAsDefault()
         {
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.WithAnyCase();
 
             var regex = verbEx.ToRegex();
@@ -39,10 +37,9 @@ namespace VerbalExpressionsUnitTests
         [Test]
         public void WithAnyCase_AddwwwWithAnyCaseFalse_DoesNotMatchwWw()
         {
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.Add("www")
                 .WithAnyCase(false);
-
 
             var isMatch = verbEx.IsMatch("wWw");
             Assert.IsFalse(isMatch, "Should not match any case");

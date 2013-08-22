@@ -11,14 +11,12 @@ namespace VerbalExpressionsUnitTests
     [TestFixture]
     class SanatizeTests
     {
-        private VerbalExpressions verbEx = null;
-
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Sanitize_Handles_Null_String()
         {
             //Arrange
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             string value = null;
 
             //Act
@@ -30,7 +28,7 @@ namespace VerbalExpressionsUnitTests
         public void Sanitize_AddCharactersThatShouldBeEscaped_ReturnsEscapedString()
         {
             //Arrange
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             string value = "*+?";
             string result = string.Empty;
             string expected = @"\*\+\?";

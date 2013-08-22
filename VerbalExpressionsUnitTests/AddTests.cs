@@ -10,14 +10,13 @@ namespace VerbalExpressionsUnitTests
     [TestFixture]
     class AddTests
     {
-        VerbalExpressions verbEx = null;
 
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Add_WhenNullStringPassedAsParameter_ShouldThrowNullArgumentException()
         {
             //Arrange
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             string value = null;
 
             //Act
@@ -28,7 +27,7 @@ namespace VerbalExpressionsUnitTests
         [Test]
         public void Add_AddDotCom_DoesNotMatchGoogleComWithoutDot()
         {
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.Add(".com");
 
             var isMatch = verbEx.IsMatch("http://www.googlecom/");
@@ -38,6 +37,7 @@ namespace VerbalExpressionsUnitTests
         [Test]
         public void AddModifier_AddModifierI_RemovesCase()
         {
+            var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.Add("teststring")
                 .AddModifier('i');
 
@@ -48,6 +48,7 @@ namespace VerbalExpressionsUnitTests
         [Test]
         public void AddModifier_AddModifierX_IgnoreWhitspace()
         {
+            var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.Add("test string")
                   .AddModifier('x');
 
@@ -58,6 +59,7 @@ namespace VerbalExpressionsUnitTests
         public void AddModifier_AddModifierM_Multiline()
         {
             //Arrange
+            var verbEx = VerbalExpressions.DefaultExpression;
             string text = string.Format("testin with {0} line break", Environment.NewLine);
 
             //Act

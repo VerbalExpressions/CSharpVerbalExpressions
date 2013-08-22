@@ -8,12 +8,10 @@ namespace VerbalExpressionsUnitTests
     [TestFixture]
     public class ThenTests
     {
-        private VerbalExpressions verbEx = null;
-
         [Test]
         public void Then_VerbalExpressionsEmail_DoesMatchEmail()
         {
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.StartOfLine().Then(CommonRegex.Email);
 
             var isMatch = verbEx.IsMatch("test@github.com");
@@ -23,7 +21,7 @@ namespace VerbalExpressionsUnitTests
         [Test]
         public void Then_VerbalExpressionsEmail_DoesNotMatchUrl()
         {
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.StartOfLine().Then(CommonRegex.Email);
 
             var isMatch = verbEx.IsMatch("http://www.google.com");
@@ -33,7 +31,7 @@ namespace VerbalExpressionsUnitTests
         [Test]
         public void Then_VerbalExpressionsUrl_DoesMatchUrl()
         {
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.StartOfLine()
                   .Then(CommonRegex.Url);
 
@@ -45,7 +43,7 @@ namespace VerbalExpressionsUnitTests
         [Test]
         public void Then_VerbalExpressionsUrl_DoesNotMatchEmail()
         {
-            verbEx = VerbalExpressions.DefaultExpression;
+            var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.StartOfLine().Then(CommonRegex.Url);
 
             Assert.IsFalse(verbEx.IsMatch("test@github.com"), "Should not match email address");
