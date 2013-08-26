@@ -5,7 +5,11 @@ CSharpVerbalExpressions
 VerbalExpressions is a CSharp library that helps to construct difficult regular expressions.
 
 ## How to get started
+When first building the solution there will be external libraries that are missing since GitHub doesn't include DLLs. 
+The best way to get these libraries into your solution is to use NuGet.
 
+The libraries that are needed to build are the following:
+* NUnit
 
 ## Examples
 
