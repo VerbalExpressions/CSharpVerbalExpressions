@@ -72,6 +72,7 @@ namespace VerbalExpressionsUnitTests
             //Assert
             verbEx.AnyOf(value);
         }
+
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]
         public void Any_WhenValueParameterIsNullOrEmpty_ShouldThrowArgumentException()

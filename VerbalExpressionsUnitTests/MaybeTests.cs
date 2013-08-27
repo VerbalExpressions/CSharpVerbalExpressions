@@ -1,15 +1,10 @@
 ﻿using CSharpVerbalExpressions;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace VerbalExpressionsUnitTests
 {
     [TestFixture]
-    class MaybeTests
+    public class MaybeTests
     {
         [Test]
         public void Maybe_WhenCalled_UsesCommonRegexUrl()

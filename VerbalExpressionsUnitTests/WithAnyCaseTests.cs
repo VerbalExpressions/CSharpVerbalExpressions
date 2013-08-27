@@ -1,15 +1,11 @@
-﻿using CSharpVerbalExpressions;
+﻿using System.Text.RegularExpressions;
+using CSharpVerbalExpressions;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace VerbalExpressionsUnitTests
 {
     [TestFixture]
-    class WithAnyCaseTests
+    public class WithAnyCaseTests
     {
         [Test]
         public void WithAnyCase_AddwwwWithAnyCase_DoesMatchwWw()

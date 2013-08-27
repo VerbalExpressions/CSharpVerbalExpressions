@@ -1,14 +1,11 @@
-﻿using CSharpVerbalExpressions;
+﻿using System;
+using CSharpVerbalExpressions;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace VerbalExpressionsUnitTests
 {
     [TestFixture]
-    class RangeTests
+    public class RangeTests
     {
         [Test]
         public void Range_WhenOddNumberOfItemsInArray_ShouldAppendLastElementWithOrClause()

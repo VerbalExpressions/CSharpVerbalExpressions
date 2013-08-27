@@ -1,15 +1,11 @@
 ﻿using CSharpVerbalExpressions;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace VerbalExpressionsUnitTests
 {
     [TestFixture]
-    class MultipleTests
+    public class MultipleTests
     {
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]
@@ -53,6 +49,5 @@ namespace VerbalExpressionsUnitTests
             //Assert
             verbEx.Multiple(argument);
         }
-    
     }
 }

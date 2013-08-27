@@ -1,15 +1,11 @@
-﻿using CSharpVerbalExpressions;
+﻿using System;
+using CSharpVerbalExpressions;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
 
 namespace VerbalExpressionsUnitTests
 {
     [TestFixture]
-    class OrTests
+    public class OrTests
     {
         [Test]
         public void Or_AddComOrOrg_DoesMatchComAndOrg()

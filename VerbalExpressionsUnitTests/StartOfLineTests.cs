@@ -1,15 +1,11 @@
 ﻿using CSharpVerbalExpressions;
 using NUnit.Framework;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
 namespace VerbalExpressionsUnitTests
 {
     [TestFixture]
-    class StartOfLineTests
+    public class StartOfLineTests
     {
         [Test]
         public void StartOfLine_CreatesCorrectRegex()
@@ -54,6 +50,5 @@ namespace VerbalExpressionsUnitTests
             var isMatch = verbEx.IsMatch("www");
             Assert.IsFalse(isMatch, "Should not match www in start");
         }
-
     }
 }

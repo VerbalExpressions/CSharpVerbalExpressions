@@ -1,6 +1,4 @@
-﻿using System;
-using System.Text.RegularExpressions;
-using CSharpVerbalExpressions;
+﻿using CSharpVerbalExpressions;
 using NUnit.Framework;
 
 namespace VerbalExpressionsUnitTests
@@ -48,6 +46,5 @@ namespace VerbalExpressionsUnitTests
 
             Assert.IsFalse(verbEx.IsMatch("test@github.com"), "Should not match email address");
         }
-
     }
 }
