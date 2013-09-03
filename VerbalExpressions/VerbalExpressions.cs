@@ -185,6 +185,17 @@ namespace CSharpVerbalExpressions
             return Add(value, false);
         }
 
+        public VerbalExpressions Something() {
+            return Add("(.+)", false);
+        }
+
+        public VerbalExpressions SomethingBut(string value, bool sanitize = true)
+        {
+            value = sanitize ? Sanitize(value) : value;
+            value = string.Format("([^" + value + "]+)");
+            return Add(value, false);
+        }
+
         public VerbalExpressions Replace(string value)
         {
             string whereToReplace = PatternRegex.ToString();
@@ -426,5 +437,6 @@ namespace CSharpVerbalExpressions
         #endregion Expression Options Modifiers
 
         #endregion Public Methods
+
     }
 }

@@ -48,6 +48,8 @@
     <Compile Include="RangeTests.cs" />
     <Compile Include="RemoveModifierTests.cs" />
     <Compile Include="SanatizeTests.cs" />
+    <Compile Include="SomethingButTests.cs" />
+    <Compile Include="SomethingTests.cs" />
     <Compile Include="StartOfLineTests.cs" />
     <Compile Include="ThenTests.cs" />
     <Compile Include="VerbalExpressionsTests.cs" />
