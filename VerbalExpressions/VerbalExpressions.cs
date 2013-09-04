@@ -325,14 +325,22 @@ namespace CSharpVerbalExpressions
 
         public VerbalExpressions Or(string value, bool sanitize = true)
         {
-            if (_prefixes.IndexOf("(") == -1)
-                _prefixes += "(";
-            if (_suffixes.IndexOf(")") == -1)
-                _suffixes = ")" + _suffixes;
+            _prefixes += "(";
+            _suffixes = ")" + _suffixes;
 
             _source += ")|(";
 
             return Add(value, sanitize);
+        }
+
+        public VerbalExpressions BeginCapture()
+        {
+            return Add("(", false);
+        }
+
+        public VerbalExpressions EndCapture()
+        {
+            return Add(")", false);
         }
 
         #endregion Expression Modifiers
@@ -343,9 +351,6 @@ namespace CSharpVerbalExpressions
         {
             switch (modifier)
             {
-                    //case 'd':
-                    //	_modifiers |= RegexOptions.UNIX_LINES;
-                    //	break;
                 case 'i':
                     _modifiers |= RegexOptions.IgnoreCase;
                     break;
@@ -355,15 +360,9 @@ namespace CSharpVerbalExpressions
                 case 'm':
                     _modifiers |= RegexOptions.Multiline;
                     break;
-                    //case 's':
-                    //	_modifiers |= RegexOptions.DOTALL;
-                    //	break;
-                    //case 'u':
-                    //	_modifiers |= Pattern.UNICODE_CASE;
-                    //	break;
-                    //case 'U':
-                    //	_modifiers |= Pattern.UNICODE_CHARACTER_CLASS;
-                    //	break;
+                case 's':
+                	_modifiers |= RegexOptions.Singleline;
+                	break;
             }
 
             return this;
@@ -373,9 +372,6 @@ namespace CSharpVerbalExpressions
         {
             switch (modifier)
             {
-                    //case 'd':
-                    //	_modifiers &= ~Pattern.UNIX_LINES;
-                    //	break;
                 case 'i':
                     _modifiers &= ~RegexOptions.IgnoreCase;
                     break;
@@ -385,17 +381,9 @@ namespace CSharpVerbalExpressions
                 case 'm':
                     _modifiers &= ~RegexOptions.Multiline;
                     break;
-                    //case 's':
-                    //	_modifiers &= ~Pattern.DOTALL;
-                    //	break;
-                    //case 'u':
-                    //	_modifiers &= ~Pattern.UNICODE_CASE;
-                    //	break;
-                    //case 'U':
-                    //	_modifiers &= ~Pattern.UNICODE_CHARACTER_CLASS;
-                    //	break;
-                    //default:
-                    //	break;
+                case 's':
+                    _modifiers &= ~RegexOptions.Singleline;
+                    break;
             }
 
             return this;
@@ -437,6 +425,5 @@ namespace CSharpVerbalExpressions
         #endregion Expression Options Modifiers
 
         #endregion Public Methods
-
     }
 }
