@@ -6,7 +6,9 @@ VerbalExpressions is a CSharp library that helps to construct difficult regular 
 
 ## How to get started
 When first building the solution there will be external libraries that are missing since GitHub doesn't include DLLs. 
-The best way to get these libraries into your solution is to use NuGet.
+The best way to get these libraries into your solution is to use NuGet. However, since the project is now using NuGet 
+Package Restore, manually installing the packages may not be necessary. Below lists the libraries that are required
+if manual installing is needed.
 
 The libraries that are needed to build are the following:
 * NUnit
