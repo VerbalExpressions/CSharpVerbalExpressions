@@ -4,6 +4,7 @@ using NUnit.Framework;
 
 namespace VerbalExpressionsUnitTests {
 
+    [ TestFixture ]
     public class AddModifierTests {
         [ Test ]
         public void AddModifier_AddModifierI_RemovesCase() {
@@ -11,14 +12,6 @@ namespace VerbalExpressionsUnitTests {
             verbEx.Add( "teststring" ).AddModifier( 'i' );
 
             Assert.IsTrue( verbEx.IsMatch( "TESTSTRING" ) );
-        }
-
-        [ Test ]
-        public void AddModifier_AddModifierX_IgnoreWhitspace() {
-            VerbalExpressions verbEx = VerbalExpressions.DefaultExpression;
-            verbEx.Add( "test string" ).AddModifier( 'x' );
-
-            Assert.IsTrue( verbEx.IsMatch( "test string #comment" ) );
         }
 
         [ Test ]
@@ -52,6 +45,14 @@ namespace VerbalExpressionsUnitTests {
             Assert.IsTrue(
                           verbEx.IsMatch( testString ),
                 "The dot matches a single character and line break characters." );
+        }
+
+        [ Test ]
+        public void AddModifier_AddModifierX_IgnoreWhitspace() {
+            VerbalExpressions verbEx = VerbalExpressions.DefaultExpression;
+            verbEx.Add( "test string" ).AddModifier( 'x' );
+
+            Assert.IsTrue( verbEx.IsMatch( "test string #comment" ) );
         }
     }
 
