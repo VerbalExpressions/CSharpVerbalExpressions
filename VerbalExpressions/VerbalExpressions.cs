@@ -253,7 +253,7 @@ namespace CSharpVerbalExpressions
                 throw new ArgumentNullException("arguments");
             }
 
-            if (arguments.Length == 1 || arguments.Length > 3)
+            if (arguments.Length == 1)
             {
                 throw new ArgumentOutOfRangeException("arguments");
             }
@@ -279,6 +279,11 @@ namespace CSharpVerbalExpressions
                     !string.IsNullOrEmpty(sanitizedString))
                 .OrderBy(s => s)
                 .ToArray();
+
+            if (sanitizedStrings.Length > 3)
+            {
+                throw new ArgumentOutOfRangeException("arguments");
+            }
 
             if (!sanitizedStrings.Any())
             {
