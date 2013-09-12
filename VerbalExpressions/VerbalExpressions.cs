@@ -185,7 +185,8 @@ namespace CSharpVerbalExpressions
             return Add(value, false);
         }
 
-        public VerbalExpressions Something() {
+        public VerbalExpressions Something()
+        {
             return Add("(.+)", false);
         }
 
@@ -258,32 +259,38 @@ namespace CSharpVerbalExpressions
             }
 
             string[] sanitizedStrings = arguments.Select(argument =>
+            {
+                if (object.ReferenceEquals(argument, null))
                 {
-                    if (object.ReferenceEquals(argument, null))
-                    {
-                        return string.Empty;
-                    }
+                    return string.Empty;
+                }
 
-                    string casted = argument.ToString();
-                    if (string.IsNullOrEmpty(casted))
-                    {
-                        return string.Empty;
-                    }
-                    else
-                    {
-                        return Sanitize(casted);
-                    }
-                })
-                                                 .Where(sanitizedString => !string.IsNullOrEmpty(sanitizedString))
-                                                 .OrderBy(s => s)
-                                                 .ToArray();
+                string casted = argument.ToString();
+                if (string.IsNullOrEmpty(casted))
+                {
+                    return string.Empty;
+                }
+                else
+                {
+                    return Sanitize(casted);
+                }
+            })
+                .Where(sanitizedString =>
+                    !string.IsNullOrEmpty(sanitizedString))
+                .OrderBy(s => s)
+                .ToArray();
+
+            if (sanitizedStrings.Length > 3)
+            {
+                throw new ArgumentOutOfRangeException("arguments");
+            }
 
             if (!sanitizedStrings.Any())
             {
                 return this;
             }
 
-            bool hasOddNumberOfParams = (sanitizedStrings.Length%2) > 0;
+            bool hasOddNumberOfParams = (sanitizedStrings.Length % 2) > 0;
 
             StringBuilder sb = new StringBuilder("[");
             for (int _from = 0; _from < sanitizedStrings.Length; _from += 2)
@@ -361,8 +368,8 @@ namespace CSharpVerbalExpressions
                     _modifiers |= RegexOptions.Multiline;
                     break;
                 case 's':
-                	_modifiers |= RegexOptions.Singleline;
-                	break;
+                    _modifiers |= RegexOptions.Singleline;
+                    break;
             }
 
             return this;

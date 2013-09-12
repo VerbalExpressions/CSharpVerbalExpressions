@@ -8,6 +8,16 @@ namespace VerbalExpressionsUnitTests
     public class RangeTests
     {
         [Test]
+        [ExpectedException(typeof(ArgumentOutOfRangeException))]
+        public void Range_WhenTooManyItemsInArray_ShouldThrowArgumentOutOfRangeException()
+        {
+            var verbEx = VerbalExpressions.DefaultExpression;
+            object[] range = new object[4] { 1, 6, 7, 12 };
+
+            verbEx.Range(range);
+        }
+
+        [Test]
         public void Range_WhenOddNumberOfItemsInArray_ShouldAppendLastElementWithOrClause()
         {
             //Arrange
