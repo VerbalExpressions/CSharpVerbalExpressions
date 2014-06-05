@@ -43,6 +43,7 @@
     <Compile Include="AddModifierTests.cs" />
     <Compile Include="AddTests.cs" />
     <Compile Include="CaptureTests.cs" />
+    <Compile Include="RepeatPreviousTest.cs" />
     <Compile Include="EndOfLineTests.cs" />
     <Compile Include="MaybeTests.cs" />
     <Compile Include="MultipleTests.cs" />
