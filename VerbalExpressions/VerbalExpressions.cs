@@ -350,6 +350,16 @@ namespace CSharpVerbalExpressions
             return Add(")", false);
         }
 
+        public VerbalExpressions RepeatPrevious(int n)
+        {
+            return Add("{" + n + "}", false);
+        }
+
+        public VerbalExpressions RepeatPrevious(int n, int m)
+        {
+            return Add("{" + n + "," + m + "}", false);
+        }
+
         #endregion Expression Modifiers
 
         #region Expression Options Modifiers
@@ -432,5 +442,7 @@ namespace CSharpVerbalExpressions
         #endregion Expression Options Modifiers
 
         #endregion Public Methods
+
+      
     }
 }
