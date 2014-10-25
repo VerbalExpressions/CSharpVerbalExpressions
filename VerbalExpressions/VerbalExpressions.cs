@@ -103,6 +103,15 @@ namespace CSharpVerbalExpressions
             return PatternRegex.ToString();
         }
 
+        public string Capture(string toTest, string groupName)
+        {
+            if (!Test(toTest))
+                return null;
+
+            var match=PatternRegex.Match(toTest);
+            return match.Groups[groupName].Value;
+        }
+
         #endregion Helpers
 
         #region Expression Modifiers
@@ -343,6 +352,11 @@ namespace CSharpVerbalExpressions
         public VerbalExpressions BeginCapture()
         {
             return Add("(", false);
+        }
+
+        public VerbalExpressions BeginCapture(string groupName)
+        {
+            return Add("(?<", false).Add(groupName,true).Add(">",false);
         }
 
         public VerbalExpressions EndCapture()
