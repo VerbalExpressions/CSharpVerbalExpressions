@@ -13,6 +13,7 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.Text;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -36,9 +37,9 @@ namespace CSharpVerbalExpressions
 
         #region Private Members
 
-        private string _prefixes = "";
-        private string _source = "";
-        private string _suffixes = "";
+        private StringBuilder _prefixes = new StringBuilder();
+        private StringBuilder _source = new StringBuilder();
+        private StringBuilder _suffixes = new StringBuilder();
         private RegexOptions _modifiers = RegexOptions.Multiline;
 
         #endregion Private Members
@@ -47,7 +48,7 @@ namespace CSharpVerbalExpressions
 
         private string RegexString
         {
-            get { return _prefixes + _source + _suffixes; }
+            get { return new StringBuilder().Append(_prefixes).Append(_source).Append(_suffixes).ToString();}
         }
 
         private Regex PatternRegex
@@ -108,7 +109,7 @@ namespace CSharpVerbalExpressions
             if (!Test(toTest))
                 return null;
 
-            var match=PatternRegex.Match(toTest);
+            var match = PatternRegex.Match(toTest);
             return match.Groups[groupName].Value;
         }
 
@@ -137,19 +138,19 @@ namespace CSharpVerbalExpressions
                 throw new ArgumentNullException("value must be provided");
 
             value = sanitize ? Sanitize(value) : value;
-            _source += value;
+            _source.Append(value);
             return this;
         }
 
         public VerbalExpressions StartOfLine(bool enable = true)
         {
-            _prefixes = enable ? "^" : string.Empty;
+            _prefixes.Append(enable ? "^" : String.Empty);
             return this;
         }
 
         public VerbalExpressions EndOfLine(bool enable = true)
         {
-            _suffixes = enable ? "$" : string.Empty;
+            _suffixes.Append(enable ? "$" : String.Empty);
             return this;
         }
 
@@ -341,11 +342,9 @@ namespace CSharpVerbalExpressions
 
         public VerbalExpressions Or(string value, bool sanitize = true)
         {
-            _prefixes += "(";
-            _suffixes = ")" + _suffixes;
-
-            _source += ")|(";
-
+            _prefixes.Append("(");
+            _suffixes.Insert(0, ")");
+            _source.Append(")|(");
             return Add(value, sanitize);
         }
 
@@ -356,7 +355,7 @@ namespace CSharpVerbalExpressions
 
         public VerbalExpressions BeginCapture(string groupName)
         {
-            return Add("(?<", false).Add(groupName,true).Add(">",false);
+            return Add("(?<", false).Add(groupName, true).Add(">", false);
         }
 
         public VerbalExpressions EndCapture()
@@ -457,6 +456,6 @@ namespace CSharpVerbalExpressions
 
         #endregion Public Methods
 
-      
+
     }
 }
