@@ -36,11 +36,13 @@ namespace CSharpVerbalExpressions
 
         #region Private Members
 
+        private readonly RegexCache regexCache = new RegexCache();
+
         private string _prefixes = "";
         private string _source = "";
         private string _suffixes = "";
         private RegexOptions _modifiers = RegexOptions.Multiline;
-
+        
         #endregion Private Members
 
         #region Private Properties
@@ -52,23 +54,11 @@ namespace CSharpVerbalExpressions
 
         private Regex PatternRegex
         {
-            get { return new Regex(this.RegexString, _modifiers); }
+            get { return regexCache.Get(this.RegexString, _modifiers); }
         }
 
         #endregion Private Properties
-
-        #region Constructors
-
-        public VerbalExpressions()
-        {
-        }
-
-        static VerbalExpressions()
-        {
-        }
-
-        #endregion Constructors
-
+        
         #region Public Methods
 
         #region Helpers
