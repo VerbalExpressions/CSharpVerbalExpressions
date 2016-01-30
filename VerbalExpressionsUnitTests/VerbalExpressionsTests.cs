@@ -61,7 +61,6 @@ namespace VerbalExpressionsUnitTests
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void AnyOf_WhenValueParameterIsNullOrEmpty_ShouldThrowArgumentException()
         {
             //Arrange
@@ -70,11 +69,10 @@ namespace VerbalExpressionsUnitTests
 
             //Act
             //Assert
-            verbEx.AnyOf(value);
+            Assert.Throws<ArgumentNullException>(() => verbEx.AnyOf(value));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Any_WhenValueParameterIsNullOrEmpty_ShouldThrowArgumentException()
         {
             //Arrange
@@ -83,11 +81,10 @@ namespace VerbalExpressionsUnitTests
 
             //Act
             //Assert
-            verbEx.Any(value);
+            Assert.Throws<ArgumentNullException>(() => verbEx.Any(value));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Find_WhenNullParameterValueIsPassed_ThrowsArgumentException()
         {
             //Arrange
@@ -96,7 +93,7 @@ namespace VerbalExpressionsUnitTests
 
             //Act
             //Assert
-            verbEx.Find(value);
+            Assert.Throws<ArgumentNullException>(() => verbEx.Find(value));
         }
 
         [Test]

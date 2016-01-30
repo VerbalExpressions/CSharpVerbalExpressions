@@ -108,7 +108,7 @@ namespace CSharpVerbalExpressions
             if (!Test(toTest))
                 return null;
 
-            var match=PatternRegex.Match(toTest);
+            var match = PatternRegex.Match(toTest);
             return match.Groups[groupName].Value;
         }
 
@@ -356,7 +356,7 @@ namespace CSharpVerbalExpressions
 
         public VerbalExpressions BeginCapture(string groupName)
         {
-            return Add("(?<", false).Add(groupName,true).Add(">",false);
+            return Add("(?<", false).Add(groupName, true).Add(">", false);
         }
 
         public VerbalExpressions EndCapture()
@@ -457,6 +457,6 @@ namespace CSharpVerbalExpressions
 
         #endregion Public Methods
 
-      
+
     }
 }
