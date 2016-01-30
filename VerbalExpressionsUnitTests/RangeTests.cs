@@ -8,13 +8,14 @@ namespace VerbalExpressionsUnitTests
     public class RangeTests
     {
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Range_WhenTooManyItemsInArray_ShouldThrowArgumentOutOfRangeException()
         {
             var verbEx = VerbalExpressions.DefaultExpression;
             object[] range = new object[4] { 1, 6, 7, 12 };
 
-            verbEx.Range(range);
+            //Act
+            //Assert
+            Assert.Throws<ArgumentOutOfRangeException>(() => verbEx.Range(range));
         }
 
         [Test]
@@ -47,7 +48,6 @@ namespace VerbalExpressionsUnitTests
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Range_WhenNullParameterPassed_ShouldThrowArgumentNullException()
         {
             //Arrange
@@ -56,11 +56,10 @@ namespace VerbalExpressionsUnitTests
 
             //Act
             //Assert
-            verbEx.Range(value);
+            Assert.Throws<ArgumentNullException>(() => verbEx.Range(value));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void Range_WhenArrayParameterHasOnlyOneValue_ShouldThrowArgumentOutOfRangeException()
         {
             //Arrange
@@ -69,7 +68,7 @@ namespace VerbalExpressionsUnitTests
 
             //Act
             //Assert
-            verbEx.Range(value);
+            Assert.Throws<ArgumentOutOfRangeException>(() => verbEx.Range(value));
         }
 
         [Test]
