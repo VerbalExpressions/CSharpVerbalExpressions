@@ -1,4 +1,4 @@
-﻿/*!
+/*!
  * CSharpVerbalExpressions v0.1
  * https://github.com/VerbalExpressions/CSharpVerbalExpressions
  * 
@@ -36,11 +36,13 @@ namespace CSharpVerbalExpressions
 
         #region Private Members
 
+        private readonly RegexCache regexCache = new RegexCache();
         private StringBuilder _prefixes = new StringBuilder();
         private StringBuilder _source = new StringBuilder();
         private StringBuilder _suffixes = new StringBuilder();
-        private RegexOptions _modifiers = RegexOptions.Multiline;
 
+        private RegexOptions _modifiers = RegexOptions.Multiline;
+        
         #endregion Private Members
 
         #region Private Properties
@@ -52,23 +54,11 @@ namespace CSharpVerbalExpressions
 
         private Regex PatternRegex
         {
-            get { return new Regex(this.RegexString, _modifiers); }
+            get { return regexCache.Get(this.RegexString, _modifiers); }
         }
 
         #endregion Private Properties
-
-        #region Constructors
-
-        public VerbalExpressions()
-        {
-        }
-
-        static VerbalExpressions()
-        {
-        }
-
-        #endregion Constructors
-
+        
         #region Public Methods
 
         #region Helpers
