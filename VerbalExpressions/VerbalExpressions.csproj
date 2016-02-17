@@ -70,6 +70,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonRegex.cs" />
+    <Compile Include="RegexCache.cs" />
     <Compile Include="VerbalExpressions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
