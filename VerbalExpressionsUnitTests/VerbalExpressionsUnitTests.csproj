@@ -33,11 +33,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="nunit.framework, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+      <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddModifierTests.cs" />
@@ -65,7 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\VerbalExpressions\VerbalExpressions.csproj">
-      <Project>{a3ef47f0-704f-4155-bac7-dd919b957cc0}</Project>
+      <Project>{A3EF47F0-704F-4155-BAC7-DD919B957CC0}</Project>
       <Name>VerbalExpressions</Name>
     </ProjectReference>
   </ItemGroup>
