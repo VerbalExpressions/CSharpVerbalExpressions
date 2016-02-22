@@ -8,7 +8,6 @@ namespace VerbalExpressionsUnitTests
     public class MultipleTests
     {
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Multiple_WhenNullOrEmptyValueParameterIsPassed_ShouldThrowArgumentException()
         {
             //Arrange
@@ -17,7 +16,7 @@ namespace VerbalExpressionsUnitTests
 
             //Act
             //Assert
-            verbEx.Multiple(value);
+            Assert.Throws<ArgumentNullException>(() => verbEx.Multiple(value));
         }
 
         [Test]
@@ -38,7 +37,6 @@ namespace VerbalExpressionsUnitTests
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Multiple_WhenNullArgumentPassed_ThrowsArgumentNullException()
         {
             //Arrange
@@ -47,7 +45,7 @@ namespace VerbalExpressionsUnitTests
 
             //Act
             //Assert
-            verbEx.Multiple(argument);
+            Assert.Throws<ArgumentNullException>(() => verbEx.Multiple(argument));
         }
     }
 }
