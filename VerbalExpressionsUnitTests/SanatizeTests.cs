@@ -8,7 +8,6 @@ namespace VerbalExpressionsUnitTests
     public class SanatizeTests
     {
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void Sanitize_Handles_Null_String()
         {
             //Arrange
@@ -17,7 +16,8 @@ namespace VerbalExpressionsUnitTests
 
             //Act
             //Assert
-            value = verbEx.Sanitize(value);
+
+            Assert.Throws<ArgumentNullException>(() => verbEx.Any(value));
         }
 
         [Test]

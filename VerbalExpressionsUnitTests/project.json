@@ -1,0 +1,35 @@
+{
+  "version": "1.0.0-*",
+  "compilationOptions": {
+    "emitEntryPoint": false
+  },
+  "tooling": {
+    "defaultNamespace": "VerbalExpressionsUnitTests"
+  },
+  "dependencies": {
+    "VerbalExpressions": ""
+  },
+  "frameworks": {
+    "dnxcore50": {
+      "dependencies": {
+        "System.Runtime": "4.0.0",
+        "System.Text.RegularExpressions": "4.0.0",
+        "System.Linq": "4.0.0",
+        "System.Threading": "4.0.0",
+        "NUnit": "3.2.0",
+		"NUnitLite": "3.0.0-*",
+        "System.Runtime.Extensions": "4.0.0",
+        "System.Console": "4.0.0-*",
+        "System.Runtime.InteropServices": "4.0.0",
+      }
+    }
+  },
+  "commands": {
+    "test": "VerbalExpressionsUnitTests"
+  },
+  "publishExclude": [
+    "**.user",
+    "**.vspscc",
+    "**.DotSettings"
+  ]
+}

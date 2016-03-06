@@ -8,16 +8,15 @@ namespace VerbalExpressionsUnitTests
 	public class AddTests
 	{
 	    [Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void Add_WhenNullStringPassedAsParameter_ShouldThrowNullArgumentException()
 		{
 			//Arrange
 			var verbEx = VerbalExpressions.DefaultExpression;
 			string value = null;
 
-			//Act
-			//Assert
-			verbEx.Add(value);
+            //Act
+            //Assert
+            Assert.Throws<ArgumentNullException>(() => verbEx.Add(value));
 		}
 
 		[Test]

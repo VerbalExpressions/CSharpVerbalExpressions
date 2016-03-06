@@ -1,0 +1,41 @@
+{
+  "version": "1.0.0-*",
+  "compilationOptions": {
+    "emitEntryPoint": false
+  },
+  "tooling": {
+    "defaultNamespace": "CSharpVerbalExpressions"
+  },
+  "dependencies": {
+  },
+  "frameworks": {
+	".NETPortable,Version=v4.6,Profile=Profile151": {
+      "frameworkAssemblies": {
+        "System.Runtime": "",
+        "System.Text.RegularExpressions": "",
+        "System.Linq": "",
+        "System.Threading": ""
+      },
+	},
+    ".NETPortable,Version=v4.0,Profile=Profile136": {
+      "frameworkAssemblies": {
+        "mscorlib": "",
+        "System": "",
+        "System.Core": ""
+      }
+    },
+    "dnxcore50": {
+      "dependencies": {
+        "System.Runtime": "4.0.0",
+        "System.Text.RegularExpressions": "4.0.0",
+        "System.Linq": "4.0.0",
+        "System.Threading": "4.0.0"
+      }
+    }
+  },
+  "publishExclude": [
+    "**.user",
+    "**.vspscc",
+    "**.DotSettings"
+  ]
+}

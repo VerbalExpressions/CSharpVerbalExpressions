@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
 using CSharpVerbalExpressions;
 using NUnit.Framework;
+using NUnit.Framework.Compatibility;
 
 namespace VerbalExpressionsUnitTests
 {
@@ -42,7 +42,7 @@ namespace VerbalExpressionsUnitTests
             }
 
             sw.Stop();
-            return sw.Elapsed;
+            return TimeSpan.FromMilliseconds(sw.ElapsedMilliseconds);
         }
     }
 }
