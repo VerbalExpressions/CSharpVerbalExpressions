@@ -1,5 +1,16 @@
 {
-  "version": "1.0.0-*",
+  "name": "CSharpVerbalExpressions",
+  "version": "0.0.1",
+  "title": "C# Verbal Expressions Library",
+  "authors": [ "psoholt", "alexpeta" ],
+  "owners": [ "psoholt", "alexpeta" ],
+  "licenseUrl": "http://verbalexpressions.github.io/",
+  "projectUrl": "https://github.com/VerbalExpressions/CSharpVerbalExpressions",
+  "iconUrl": "https://identicons.github.com/0fbf161cf89fd5b1ff07f54bfefeea61.png",
+  "description": "Verbal Expressions is a small library that allows you to write regular expressions in natural language.",
+  "releaseNotes": "First release ever. Just testing how to package for NuGet.",
+  "copyright": "Copyright 2013",
+  "tags": [ "C#", "VerbalExpressions" ],
   "compilationOptions": {
     "emitEntryPoint": false
   },
