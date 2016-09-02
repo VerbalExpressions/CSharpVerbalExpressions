@@ -1,171 +1,169 @@
 ﻿using System;
 using System.Text.RegularExpressions;
 using CSharpVerbalExpressions;
-using NUnit.Framework;
+using Xunit;
 
 namespace VerbalExpressionsUnitTests
 {
-    [TestFixture]
-    public class VerbalExpressionsTests
-    {
-        [Test]
-        public void TestingIfWeHaveAValidURL()
-        {
-            var verbEx = VerbalExpressions.DefaultExpression
-                        .StartOfLine()
-                        .Then("http")
-                        .Maybe("s")
-                        .Then("://")
-                        .Maybe("www.")
-                        .AnythingBut(" ")
-                        .EndOfLine();
+	public class VerbalExpressionsTests
+	{
+		[Fact]
+		public void TestingIfWeHaveAValidURL()
+		{
+			var verbEx = VerbalExpressions.DefaultExpression
+						.StartOfLine()
+						.Then("http")
+						.Maybe("s")
+						.Then("://")
+						.Maybe("www.")
+						.AnythingBut(" ")
+						.EndOfLine();
 
-            var testMe = "https://www.google.com";
+			var testMe = "https://www.google.com";
 
-            Assert.IsTrue(verbEx.Test(testMe), "The URL is incorrect");
-        }
+			Assert.True(verbEx.Test(testMe), "The URL is incorrect");
+		}
 
-        [Test]
-        public void Anything_StartOfLineAnythingEndOfline_DoesMatchAnyThing()
-        {
-            var verbEx = VerbalExpressions.DefaultExpression
-                .StartOfLine()
-                .Anything()
-                .EndOfLine();
+		[Fact]
+		public void Anything_StartOfLineAnythingEndOfline_DoesMatchAnyThing()
+		{
+			var verbEx = VerbalExpressions.DefaultExpression
+				.StartOfLine()
+				.Anything()
+				.EndOfLine();
 
+			var isMatch = verbEx.IsMatch("'!@#$%¨&*()__+{}'");
+			Assert.True(isMatch, "Ooops, should match anything");
+		}
 
-            var isMatch = verbEx.IsMatch("'!@#$%¨&*()__+{}'");
-            Assert.IsTrue(isMatch, "Ooops, should match anything");
-        }
+		[Fact]
+		public void Replace_WhenCalledImmediatelyAfteInitialize_ShouldNotThrowNullReferenceException()
+		{
+			//Arrange
+			var verbEx = VerbalExpressions.DefaultExpression;
+			string value = "value";
+			bool hasThrownNullReferenceEx = false;
 
-        [Test]
-        public void Replace_WhenCalledImmediatelyAfteInitialize_ShouldNotThrowNullReferenceException()
-        {
-            //Arrange
-            var verbEx = VerbalExpressions.DefaultExpression;
-            string value = "value";
-            bool hasThrownNullReferenceEx = false;
+			//Act
+			try
+			{
+				verbEx.Replace(value);
+			}
+			catch (NullReferenceException)
+			{
+				hasThrownNullReferenceEx = true;
+			}
 
-            //Act
-            try
-            {
-                verbEx.Replace(value);
-            }
-            catch (NullReferenceException)
-            {
-                hasThrownNullReferenceEx = true;
-            }
+			//Assert
+			Assert.False(hasThrownNullReferenceEx);
+		}
 
-            //Assert
-            Assert.IsFalse(hasThrownNullReferenceEx);
-        }
+		[Fact]
+		public void AnyOf_WhenValueParameterIsNullOrEmpty_ShouldThrowArgumentException()
+		{
+			//Arrange
+			var verbEx = VerbalExpressions.DefaultExpression;
+			string value = null;
 
-        [Test]
-        public void AnyOf_WhenValueParameterIsNullOrEmpty_ShouldThrowArgumentException()
-        {
-            //Arrange
-            var verbEx = VerbalExpressions.DefaultExpression;
-            string value = null;
+			//Act
+			//Assert
+			Assert.Throws<ArgumentNullException>(() => verbEx.AnyOf(value));
+		}
 
-            //Act
-            //Assert
-            Assert.Throws<ArgumentNullException>(() => verbEx.AnyOf(value));
-        }
+		[Fact]
+		public void Any_WhenValueParameterIsNullOrEmpty_ShouldThrowArgumentException()
+		{
+			//Arrange
+			var verbEx = VerbalExpressions.DefaultExpression;
+			string value = null;
 
-        [Test]
-        public void Any_WhenValueParameterIsNullOrEmpty_ShouldThrowArgumentException()
-        {
-            //Arrange
-            var verbEx = VerbalExpressions.DefaultExpression;
-            string value = null;
+			//Act
+			//Assert
+			Assert.Throws<ArgumentNullException>(() => verbEx.Any(value));
+		}
 
-            //Act
-            //Assert
-            Assert.Throws<ArgumentNullException>(() => verbEx.Any(value));
-        }
+		[Fact]
+		public void Find_WhenNullParameterValueIsPassed_ThrowsArgumentException()
+		{
+			//Arrange
+			var verbEx = VerbalExpressions.DefaultExpression;
+			string value = null;
 
-        [Test]
-        public void Find_WhenNullParameterValueIsPassed_ThrowsArgumentException()
-        {
-            //Arrange
-            var verbEx = VerbalExpressions.DefaultExpression;
-            string value = null;
+			//Act
+			//Assert
+			Assert.Throws<ArgumentNullException>(() => verbEx.Find(value));
+		}
 
-            //Act
-            //Assert
-            Assert.Throws<ArgumentNullException>(() => verbEx.Find(value));
-        }
+		[Fact]
+		public void LineBreak_WhenCalled_ReturnsExpectedExpression()
+		{
+			//Arrange
+			var verbEx = VerbalExpressions.DefaultExpression;
+			string text = string.Format("testin with {0} line break", Environment.NewLine);
 
-        [Test]
-        public void LineBreak_WhenCalled_ReturnsExpectedExpression()
-        {
-            //Arrange
-            var verbEx = VerbalExpressions.DefaultExpression;
-            string text = string.Format("testin with {0} line break", Environment.NewLine);
+			//Act
+			verbEx.LineBreak();
+			//Assert
+			Assert.True(verbEx.Test(text));
+		}
 
-            //Act
-            verbEx.LineBreak();
-            //Assert
-            Assert.IsTrue(verbEx.Test(text));
-        }
+		[Fact]
+		public void Br_WhenCalled_ReturnsExpectedExpression()
+		{
+			//Arrange
+			var verbEx = VerbalExpressions.DefaultExpression;
+			string text = string.Format("testin with {0} line break", Environment.NewLine);
 
-        [Test]
-        public void Br_WhenCalled_ReturnsExpectedExpression()
-        {
-            //Arrange
-            var verbEx = VerbalExpressions.DefaultExpression;
-            string text = string.Format("testin with {0} line break", Environment.NewLine);
+			//Act
+			verbEx.Br();
+			//Assert
+			Assert.True(verbEx.Test(text));
+		}
 
-            //Act
-            verbEx.Br();
-            //Assert
-            Assert.IsTrue(verbEx.Test(text));
-        }
+		[Fact]
+		public void Tab_WhenCalled_ReturnsExpectedExpression()
+		{
+			//Arrange
+			var verbEx = VerbalExpressions.DefaultExpression;
+			string text = string.Format("text that contains {0} a tab", @"\t");
 
-        [Test]
-        public void Tab_WhenCalled_ReturnsExpectedExpression()
-        {
-            //Arrange
-            var verbEx = VerbalExpressions.DefaultExpression;
-            string text = string.Format("text that contains {0} a tab", @"\t");
+			//Act
+			verbEx.Tab();
 
-            //Act
-            verbEx.Tab();
+			//Assert
+			Assert.True(verbEx.Test(text));
+		}
 
-            //Assert
-            Assert.IsTrue(verbEx.Test(text));
-        }
+		[Fact]
+		public void Word_WhenCalled_ReturnsExpectedNumberOfWords()
+		{
+			//Arrange
+			var verbEx = VerbalExpressions.DefaultExpression;
+			string text = "three words here";
+			int expectedCount = 3;
 
-        [Test]
-        public void Word_WhenCalled_ReturnsExpectedNumberOfWords()
-        {
-            //Arrange
-            var verbEx = VerbalExpressions.DefaultExpression;
-            string text = "three words here";
-            int expectedCount = 3;
+			//Act
+			verbEx.Word();
+			Regex currentExpression = verbEx.ToRegex();
+			int result = currentExpression.Matches(text).Count;
 
-            //Act
-            verbEx.Word();
-            Regex currentExpression = verbEx.ToRegex();
-            int result = currentExpression.Matches(text).Count;
+			//Assert
+			Assert.Equal(expectedCount, result);
+		}
 
-            //Assert
-            Assert.AreEqual(expectedCount, result);
-        }
-
-        [Test]
-        public void UseOneLineSearchOption_WhenCalled_ShouldChangeMultilineModifier()
-        {
-            //Arrange
-            var verbEx = VerbalExpressions.DefaultExpression;
-            verbEx.UseOneLineSearchOption(false);
-            var regex = verbEx.ToRegex();
-            Assert.IsTrue(regex.Options.HasFlag(RegexOptions.Multiline), "RegexOptions should now be present");
-            //Act
-            verbEx.UseOneLineSearchOption(true);
-            //Assert
-            regex = verbEx.ToRegex();
-            Assert.IsFalse(regex.Options.HasFlag(RegexOptions.Multiline), "RegexOptions should now have been removed");
-        }
-    }
+		[Fact]
+		public void UseOneLineSearchOption_WhenCalled_ShouldChangeMultilineModifier()
+		{
+			//Arrange
+			var verbEx = VerbalExpressions.DefaultExpression;
+			verbEx.UseOneLineSearchOption(false);
+			var regex = verbEx.ToRegex();
+			Assert.True(regex.Options.HasFlag(RegexOptions.Multiline), "RegexOptions should now be present");
+			//Act
+			verbEx.UseOneLineSearchOption(true);
+			//Assert
+			regex = verbEx.ToRegex();
+			Assert.False(regex.Options.HasFlag(RegexOptions.Multiline), "RegexOptions should now have been removed");
+		}
+	}
 }

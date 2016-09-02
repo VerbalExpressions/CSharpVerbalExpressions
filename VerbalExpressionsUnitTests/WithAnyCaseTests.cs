@@ -1,44 +1,42 @@
 ﻿using System.Text.RegularExpressions;
 using CSharpVerbalExpressions;
-using NUnit.Framework;
+using Xunit;
 
 namespace VerbalExpressionsUnitTests
 {
-    [TestFixture]
-    public class WithAnyCaseTests
-    {
-        [Test]
-        public void WithAnyCase_AddwwwWithAnyCase_DoesMatchwWw()
-        {
-            var verbEx = VerbalExpressions.DefaultExpression;
-            verbEx.Add("www")
-                .WithAnyCase();
+	public class WithAnyCaseTests
+	{
+		[Fact]
+		public void WithAnyCase_AddwwwWithAnyCase_DoesMatchwWw()
+		{
+			var verbEx = VerbalExpressions.DefaultExpression;
+			verbEx.Add("www")
+				.WithAnyCase();
 
+			var isMatch = verbEx.IsMatch("wWw");
+			Assert.True(isMatch, "Should match any case");
+		}
 
-            var isMatch = verbEx.IsMatch("wWw");
-            Assert.IsTrue(isMatch, "Should match any case");
-        }
+		[Fact]
+		public void WithAnyCase_SetsCorrectIgnoreCaseRegexOptionAndHasMultiLineRegexOptionAsDefault()
+		{
+			var verbEx = VerbalExpressions.DefaultExpression;
+			verbEx.WithAnyCase();
 
-        [Test]
-        public void WithAnyCase_SetsCorrectIgnoreCaseRegexOptionAndHasMultiLineRegexOptionAsDefault()
-        {
-            var verbEx = VerbalExpressions.DefaultExpression;
-            verbEx.WithAnyCase();
+			var regex = verbEx.ToRegex();
+			Assert.True(regex.Options.HasFlag(RegexOptions.IgnoreCase), "RegexOptions should have ignoreCase");
+			Assert.True(regex.Options.HasFlag(RegexOptions.Multiline), "RegexOptions should have MultiLine as default");
+		}
 
-            var regex = verbEx.ToRegex();
-            Assert.IsTrue(regex.Options.HasFlag(RegexOptions.IgnoreCase), "RegexOptions should have ignoreCase");
-            Assert.IsTrue(regex.Options.HasFlag(RegexOptions.Multiline), "RegexOptions should have MultiLine as default");
-        }
+		[Fact]
+		public void WithAnyCase_AddwwwWithAnyCaseFalse_DoesNotMatchwWw()
+		{
+			var verbEx = VerbalExpressions.DefaultExpression;
+			verbEx.Add("www")
+				.WithAnyCase(false);
 
-        [Test]
-        public void WithAnyCase_AddwwwWithAnyCaseFalse_DoesNotMatchwWw()
-        {
-            var verbEx = VerbalExpressions.DefaultExpression;
-            verbEx.Add("www")
-                .WithAnyCase(false);
-
-            var isMatch = verbEx.IsMatch("wWw");
-            Assert.IsFalse(isMatch, "Should not match any case");
-        }
-    }
+			var isMatch = verbEx.IsMatch("wWw");
+			Assert.False(isMatch, "Should not match any case");
+		}
+	}
 }

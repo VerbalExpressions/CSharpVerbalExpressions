@@ -1,41 +1,40 @@
 ﻿using System;
 using CSharpVerbalExpressions;
-using NUnit.Framework;
+using Xunit;
 
 namespace VerbalExpressionsUnitTests
 {
-    [TestFixture]
-    public class OrTests
-    {
-        [Test]
-        public void Or_AddComOrOrg_DoesMatchComAndOrg()
-        {
-            var verbEx = VerbalExpressions.DefaultExpression;
-            verbEx.Add("com").Or("org");
+	public class OrTests
+	{
+		[Fact]
+		public void Or_AddComOrOrg_DoesMatchComAndOrg()
+		{
+			var verbEx = VerbalExpressions.DefaultExpression;
+			verbEx.Add("com").Or("org");
 
-            Console.WriteLine(verbEx);
-            Assert.IsTrue(verbEx.IsMatch("org"), "Should match 'org'");
-            Assert.IsTrue(verbEx.IsMatch("com"), "Should match 'com'");
-        }
+			Console.WriteLine(verbEx);
+			Assert.True(verbEx.IsMatch("org"), "Should match 'org'");
+			Assert.True(verbEx.IsMatch("com"), "Should match 'com'");
+		}
 
-        [Test]
-        public void Or_AddComOrOrg_RegexIsAsExpecteds()
-        {
-            var verbEx = VerbalExpressions.DefaultExpression;
-            verbEx.Add("com").Or("org");
+		[Fact]
+		public void Or_AddComOrOrg_RegexIsAsExpecteds()
+		{
+			var verbEx = VerbalExpressions.DefaultExpression;
+			verbEx.Add("com").Or("org");
 
-            Assert.AreEqual("(com)|(org)", verbEx.ToString());
-        }
+			Assert.Equal("(com)|(org)", verbEx.ToString());
+		}
 
-        [Test]
-        public void Or_VerbalExpressionsUrlOrVerbalExpressionEmail_DoesMatchEmailAndUrl()
-        {
-            var verbEx = VerbalExpressions.DefaultExpression;
-            verbEx.Add(CommonRegex.Url)
-                .Or(CommonRegex.Email);
+		[Fact]
+		public void Or_VerbalExpressionsUrlOrVerbalExpressionEmail_DoesMatchEmailAndUrl()
+		{
+			var verbEx = VerbalExpressions.DefaultExpression;
+			verbEx.Add(CommonRegex.Url)
+				.Or(CommonRegex.Email);
 
-            Assert.IsTrue(verbEx.IsMatch("test@github.com"), "Should match email address");
-            Assert.IsTrue(verbEx.IsMatch("http://www.google.com"), "Should match url address");
-        }
-    }
+			Assert.True(verbEx.IsMatch("test@github.com"), "Should match email address");
+			Assert.True(verbEx.IsMatch("http://www.google.com"), "Should match url address");
+		}
+	}
 }

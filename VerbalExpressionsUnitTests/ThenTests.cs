@@ -1,50 +1,49 @@
 ﻿using CSharpVerbalExpressions;
-using NUnit.Framework;
+using Xunit;
 
 namespace VerbalExpressionsUnitTests
 {
-    [TestFixture]
-    public class ThenTests
-    {
-        [Test]
-        public void Then_VerbalExpressionsEmail_DoesMatchEmail()
-        {
-            var verbEx = VerbalExpressions.DefaultExpression;
-            verbEx.StartOfLine().Then(CommonRegex.Email);
+	public class ThenTests
+	{
+		[Fact]
+		public void Then_VerbalExpressionsEmail_DoesMatchEmail()
+		{
+			var verbEx = VerbalExpressions.DefaultExpression;
+			verbEx.StartOfLine().Then(CommonRegex.Email);
 
-            var isMatch = verbEx.IsMatch("test@github.com");
-            Assert.IsTrue(isMatch, "Should match email address");
-        }
+			var isMatch = verbEx.IsMatch("test@github.com");
+			Assert.True(isMatch, "Should match email address");
+		}
 
-        [Test]
-        public void Then_VerbalExpressionsEmail_DoesNotMatchUrl()
-        {
-            var verbEx = VerbalExpressions.DefaultExpression;
-            verbEx.StartOfLine().Then(CommonRegex.Email);
+		[Fact]
+		public void Then_VerbalExpressionsEmail_DoesNotMatchUrl()
+		{
+			var verbEx = VerbalExpressions.DefaultExpression;
+			verbEx.StartOfLine().Then(CommonRegex.Email);
 
-            var isMatch = verbEx.IsMatch("http://www.google.com");
-            Assert.IsFalse(isMatch, "Should not match url address");
-        }
+			var isMatch = verbEx.IsMatch("http://www.google.com");
+			Assert.False(isMatch, "Should not match url address");
+		}
 
-        [Test]
-        public void Then_VerbalExpressionsUrl_DoesMatchUrl()
-        {
-            var verbEx = VerbalExpressions.DefaultExpression;
-            verbEx.StartOfLine()
-                  .Then(CommonRegex.Url);
+		[Fact]
+		public void Then_VerbalExpressionsUrl_DoesMatchUrl()
+		{
+			var verbEx = VerbalExpressions.DefaultExpression;
+			verbEx.StartOfLine()
+				  .Then(CommonRegex.Url);
 
-            Assert.IsTrue(verbEx.IsMatch("http://www.google.com"), "Should match url address");
-            Assert.IsTrue(verbEx.IsMatch("https://www.google.com"), "Should match url address");
-            Assert.IsTrue(verbEx.IsMatch("http://google.com"), "Should match url address");
-        }
+			Assert.True(verbEx.IsMatch("http://www.google.com"), "Should match url address");
+			Assert.True(verbEx.IsMatch("https://www.google.com"), "Should match url address");
+			Assert.True(verbEx.IsMatch("http://google.com"), "Should match url address");
+		}
 
-        [Test]
-        public void Then_VerbalExpressionsUrl_DoesNotMatchEmail()
-        {
-            var verbEx = VerbalExpressions.DefaultExpression;
-            verbEx.StartOfLine().Then(CommonRegex.Url);
+		[Fact]
+		public void Then_VerbalExpressionsUrl_DoesNotMatchEmail()
+		{
+			var verbEx = VerbalExpressions.DefaultExpression;
+			verbEx.StartOfLine().Then(CommonRegex.Url);
 
-            Assert.IsFalse(verbEx.IsMatch("test@github.com"), "Should not match email address");
-        }
-    }
+			Assert.False(verbEx.IsMatch("test@github.com"), "Should not match email address");
+		}
+	}
 }

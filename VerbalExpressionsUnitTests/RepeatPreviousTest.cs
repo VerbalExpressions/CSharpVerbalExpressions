@@ -1,44 +1,40 @@
-﻿using System.Text.RegularExpressions;
-using CSharpVerbalExpressions;
-using NUnit.Framework;
+﻿using CSharpVerbalExpressions;
+using Xunit;
 
 namespace VerbalExpressionsUnitTests
 {
-    [TestFixture]
-    public class RepeatPreviousTests
-    {
+	public class RepeatPreviousTests
+	{
+		[Fact]
+		public void RepeatPrevious_WhenThreeA_RegesIsAsExpected()
+		{
+			// Arrange
+			VerbalExpressions verbEx = VerbalExpressions.DefaultExpression;
 
-        [Test]
-        public void RepeatPrevious_WhenThreeA_RegesIsAsExpected()
-        {
-            // Arrange
-            VerbalExpressions verbEx = VerbalExpressions.DefaultExpression;
+			// Act
+			verbEx.BeginCapture()
+				  .Add("A")
+				  .RepeatPrevious(3)
+				  .EndCapture();
 
-            // Act
-            verbEx.BeginCapture()
-                  .Add("A")
-                  .RepeatPrevious(3)
-                  .EndCapture();
+			// Assert
+			Assert.Equal("(A{3})", verbEx.ToString());
+		}
 
-            // Assert
-            Assert.AreEqual("(A{3})", verbEx.ToString());
-        }
+		[Fact]
+		public void RepeatPrevious_WhenBetweenTwoAndFourA_RegesIsAsExpected()
+		{
+			// Arrange
+			VerbalExpressions verbEx = VerbalExpressions.DefaultExpression;
 
-        [Test]
-        public void RepeatPrevious_WhenBetweenTwoAndFourA_RegesIsAsExpected()
-        {
-            // Arrange
-            VerbalExpressions verbEx = VerbalExpressions.DefaultExpression;
+			// Act
+			verbEx.BeginCapture()
+				  .Add("A")
+				  .RepeatPrevious(2, 4)
+				  .EndCapture();
 
-            // Act
-            verbEx.BeginCapture()
-                  .Add("A")
-                  .RepeatPrevious(2, 4)
-                  .EndCapture();
-
-            // Assert
-            Assert.AreEqual("(A{2,4})", verbEx.ToString());
-        }
-
-    }
+			// Assert
+			Assert.Equal("(A{2,4})", verbEx.ToString());
+		}
+	}
 }

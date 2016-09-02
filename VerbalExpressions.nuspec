@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>VerbalExpressions-official</id>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <authors>VerbalExpression community</authors>
     <owners>Peder Soholt</owners>
     <projectUrl>https://github.com/VerbalExpressions/CSharpVerbalExpressions</projectUrl>
@@ -14,6 +14,7 @@
     <tags>VerbalExpression Regex</tags>
   </metadata>
   <files>
-    <file src="VerbalExpressions/bin/Debug/VerbalExpressions.dll" target="lib\net40" />
+    <file src="VerbalExpressions/bin/Debug/portable40-net40+sl5+win8+wp8/VerbalExpressions.dll" target="lib\net40" />
+    <file src="VerbalExpressions/bin/Debug/netstandard1.6/VerbalExpressions.dll" target="lib\netstandard1.6" />
   </files>
 </package>

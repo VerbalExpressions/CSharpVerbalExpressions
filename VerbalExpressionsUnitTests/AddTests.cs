@@ -1,32 +1,31 @@
 ﻿using System;
 using CSharpVerbalExpressions;
-using NUnit.Framework;
+using Xunit;
 
 namespace VerbalExpressionsUnitTests
 {
-    [TestFixture]
-    public class AddTests
-    {
-        [Test]
-        public void Add_WhenNullStringPassedAsParameter_ShouldThrowNullArgumentException()
-        {
-            //Arrange
-            var verbEx = VerbalExpressions.DefaultExpression;
-            string value = null;
+	public class AddTests
+	{
+		[Fact]
+		public void Add_WhenNullStringPassedAsParameter_ShouldThrowNullArgumentException()
+		{
+			//Arrange
+			var verbEx = VerbalExpressions.DefaultExpression;
+			string value = null;
 
-            //Act
-            //Assert
-            Assert.Throws<ArgumentNullException>(() => verbEx.Add(value));
-        }
+			//Act
+			//Assert
+			Assert.Throws<ArgumentNullException>(() => verbEx.Add(value));
+		}
 
-        [Test]
-        public void Add_AddDotCom_DoesNotMatchGoogleComWithoutDot()
-        {
-            var verbEx = VerbalExpressions.DefaultExpression;
-            verbEx.Add(".com");
+		[Fact]
+		public void Add_AddDotCom_DoesNotMatchGoogleComWithoutDot()
+		{
+			var verbEx = VerbalExpressions.DefaultExpression;
+			verbEx.Add(".com");
 
-            var isMatch = verbEx.IsMatch("http://www.googlecom/");
-            Assert.IsFalse(isMatch, "Should not match 'ecom'");
-        }
-    }
+			var isMatch = verbEx.IsMatch("http://www.googlecom/");
+			Assert.False(isMatch, "Should not match 'ecom'");
+		}
+	}
 }
