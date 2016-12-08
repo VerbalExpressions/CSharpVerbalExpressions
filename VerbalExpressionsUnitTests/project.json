@@ -10,6 +10,10 @@
 		"xunit": "2.2.0-beta2-build3300"
 	},
 	"testRunner": "xunit",
+	"runtimes": {
+		"win10-x86": {},
+		"win10-x64": {}
+	},
 	"frameworks": {
 		"netcoreapp1.0": {
 			"dependencies": {
