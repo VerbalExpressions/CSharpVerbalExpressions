@@ -7,6 +7,11 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "VerbalExpression", "src\Ver
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "VerbalExpressionsUnitTests", "test\VerbalExpressionsUnitTests\VerbalExpressionsUnitTests.xproj", "{B5337A74-79C5-4373-AF05-191F19308C62}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{0C006110-681A-42A3-BD72-CFF8BA7A1D19}"
+	ProjectSection(SolutionItems) = preProject
+		global.json = global.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

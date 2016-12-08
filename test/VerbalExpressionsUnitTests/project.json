@@ -3,12 +3,12 @@
 	"buildOptions": {
 		"debugType": "portable"
 	},
-	"dependencies": {
-		"System.Runtime.Serialization.Primitives": "4.3.0",
-		"VerbalExpressions": "0.3.0",
-		"dotnet-test-xunit": "2.2.0-preview2-build1029",
-		"xunit": "2.2.0-beta2-build3300"
-	},
+  "dependencies": {
+    "System.Runtime.Serialization.Primitives": "4.3.0",
+    "dotnet-test-xunit": "2.2.0-preview2-build1029",
+    "xunit": "2.2.0-beta4-build3444",
+    "VerbalExpressions": "0.3.0"
+  },
 	"testRunner": "xunit",
 	"runtimes": {
 		"win10-x86": {},
