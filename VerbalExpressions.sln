@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "VerbalExpression", "VerbalExpressions\VerbalExpression.xproj", "{FF80503B-9DF0-4428-9F67-66127781C1D4}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "VerbalExpression", "src\VerbalExpressions\VerbalExpression.xproj", "{FF80503B-9DF0-4428-9F67-66127781C1D4}"
 EndProject
-Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "VerbalExpressionsUnitTests", "VerbalExpressionsUnitTests\VerbalExpressionsUnitTests.xproj", "{B5337A74-79C5-4373-AF05-191F19308C62}"
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "VerbalExpressionsUnitTests", "test\VerbalExpressionsUnitTests\VerbalExpressionsUnitTests.xproj", "{B5337A74-79C5-4373-AF05-191F19308C62}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
