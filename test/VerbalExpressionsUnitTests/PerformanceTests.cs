@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using CSharpVerbalExpressions;
@@ -27,7 +27,7 @@ namespace VerbalExpressionsUnitTests
 			var timeVerbEx = MeasureCallDuration(() => verbEx.IsMatch(someUrl));
 			var timeRegex = MeasureCallDuration(() => regex.IsMatch(someUrl));
 
-			Assert.True(timeVerbEx - timeRegex < TimeSpan.FromSeconds(0.1));
+			Assert.True(timeVerbEx - timeRegex < TimeSpan.FromSeconds(1.1));
 		}
 
 		private static TimeSpan MeasureCallDuration(Action action)
