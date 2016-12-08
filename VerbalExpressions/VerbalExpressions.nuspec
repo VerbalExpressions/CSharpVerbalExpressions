@@ -2,7 +2,7 @@
 <package >
   <metadata>
     <id>CSharpVerbalExpressions</id>
-    <version>0.0.1</version>
+    <version>0.3.0</version>
     <title>C# Verbal Expressions Library</title>
     <authors>psoholt, alexpeta</authors>
     <owners>psoholt, alexpeta</owners>
