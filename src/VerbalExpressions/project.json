@@ -1,6 +1,7 @@
 {
 	"version": "0.3.0",
-
+	"name": "VerbalExpressions-netstandard",
+	"title":"VerbalExpressions-netstandard",
 	"frameworks": {
 		"netstandard1.4": {
 			"dependencies": {
