@@ -4,8 +4,8 @@
 	"frameworks": {
 		"netstandard1.4": {
 			"dependencies": {
-				"System.Text.RegularExpressions": "4.1.0",
-				"System.Linq": "4.1.0",
+				"System.Text.RegularExpressions": "4.3.0",
+				"System.Linq": "4.3.0",
 				"System.Threading": "4.0.11"
 			}
 		}
