@@ -1,4 +1,4 @@
-CSharpVerbalExpressions ![Build Status](https://travis-ci.org/IETTeam/CSharpVerbalExpressions.svg?branch=master)
+CSharpVerbalExpressions [![Build Status](https://travis-ci.org/IETTeam/CSharpVerbalExpressions.svg?branch=master)](https://travis-ci.org/IETTeam/CSharpVerbalExpressions)
 =====================
 
 ## CSharp Regular Expressions made easy
