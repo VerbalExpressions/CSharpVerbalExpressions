@@ -1,15 +1,21 @@
-/*!
- * CSharpVerbalExpressions v0.1
- * https://github.com/VerbalExpressions/CSharpVerbalExpressions
- * 
- * @psoholt
- * 
- * Date: 2013-07-26
- * 
- * Additions and Refactoring
- * @alexpeta
- * 
- * Date: 2013-08-06
+/*
+ * SonarQube, open source software quality management tool.
+ * Copyright (C) 2008-2013 SonarSource
+ * mailto:contact AT sonarsource DOT com
+ *
+ * SonarQube is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * SonarQube is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  */
 
 using System;
@@ -37,9 +43,9 @@ namespace CSharpVerbalExpressions
         #region Private Members
 
         private readonly RegexCache regexCache = new RegexCache();
-        private StringBuilder _prefixes = new StringBuilder();
-        private StringBuilder _source = new StringBuilder();
-        private StringBuilder _suffixes = new StringBuilder();
+        private readonly StringBuilder _prefixes = new StringBuilder();
+        private readonly StringBuilder _source = new StringBuilder();
+        private readonly StringBuilder _suffixes = new StringBuilder();
 
         private RegexOptions _modifiers = RegexOptions.Multiline;
         
@@ -96,8 +102,9 @@ namespace CSharpVerbalExpressions
         public string Capture(string toTest, string groupName)
         {
             if (!Test(toTest))
+            {
                 return null;
-
+            }
             var match = PatternRegex.Match(toTest);
             return match.Groups[groupName].Value;
         }
@@ -121,33 +128,53 @@ namespace CSharpVerbalExpressions
             return Add(commonRegex.Name, false);
         }
 
-        public VerbalExpressions Add(string value, bool sanitize = true)
+        public VerbalExpressions Add(string value, bool sanitize)
         {
             if (value == null)
+            {
                 throw new ArgumentNullException("value must be provided");
-
-            value = sanitize ? Sanitize(value) : value;
-            _source.Append(value);
+            }
+            var toBeAppended = sanitize ? Sanitize(value) : value;
+            _source.Append(toBeAppended);
             return this;
         }
 
-        public VerbalExpressions StartOfLine(bool enable = true)
+        public VerbalExpressions StartOfLine(bool enable)
         {
             _prefixes.Append(enable ? "^" : String.Empty);
             return this;
         }
 
-        public VerbalExpressions EndOfLine(bool enable = true)
+        public VerbalExpressions StartOfLine()
+        {
+            _prefixes.Append("^");
+            return this;
+        }
+
+        public VerbalExpressions EndOfLine(bool enable)
         {
             _suffixes.Append(enable ? "$" : String.Empty);
             return this;
         }
 
-        public VerbalExpressions Then(string value, bool sanitize = true)
+        public VerbalExpressions EndOfLine()
+        {
+            _suffixes.Append("$");
+            return this;
+        }
+
+        public VerbalExpressions Then(string value, bool sanitize)
         {
             var sanitizedValue = sanitize ? Sanitize(value) : value;
-            value = string.Format("({0})", sanitizedValue);
-            return Add(value, false);
+            var then = string.Format("({0})", sanitizedValue);
+            return Add(then, false);
+        }
+
+        public VerbalExpressions Then(string value)
+        {
+            var sanitizedValue = Sanitize(value);
+            var then = string.Format("({0})", sanitizedValue);
+            return Add(then, false);
         }
 
         public VerbalExpressions Then(CommonRegex commonRegex)
@@ -160,11 +187,18 @@ namespace CSharpVerbalExpressions
             return Then(value);
         }
 
-        public VerbalExpressions Maybe(string value, bool sanitize = true)
+        public VerbalExpressions Maybe(string value, bool sanitize)
         {
-            value = sanitize ? Sanitize(value) : value;
-            value = string.Format("({0})?", value);
-            return Add(value, false);
+            var maybe = sanitize ? Sanitize(value) : value;
+            maybe = string.Format("({0})?", maybe);
+            return Add(maybe, false);
+        }
+
+        public VerbalExpressions Maybe(string value)
+        {
+            var maybe = Sanitize(value);
+            maybe = string.Format("({0})?", maybe);
+            return Add(maybe, false);
         }
 
         public VerbalExpressions Maybe(CommonRegex commonRegex)
@@ -177,11 +211,18 @@ namespace CSharpVerbalExpressions
             return Add("(.*)", false);
         }
 
-        public VerbalExpressions AnythingBut(string value, bool sanitize = true)
+        public VerbalExpressions AnythingBut(string value, bool sanitize)
         {
-            value = sanitize ? Sanitize(value) : value;
-            value = string.Format("([^{0}]*)", value);
-            return Add(value, false);
+            var anythingBut = sanitize ? Sanitize(value) : value;
+            anythingBut = string.Format("([^{0}]*)", anythingBut);
+            return Add(anythingBut, false);
+        }
+
+        public VerbalExpressions AnythingBut(string value)
+        {
+            var anythingBut = Sanitize(value);
+            anythingBut = string.Format("([^{0}]*)", anythingBut);
+            return Add(anythingBut, false);
         }
 
         public VerbalExpressions Something()
@@ -189,11 +230,18 @@ namespace CSharpVerbalExpressions
             return Add("(.+)", false);
         }
 
-        public VerbalExpressions SomethingBut(string value, bool sanitize = true)
+        public VerbalExpressions SomethingBut(string value, bool sanitize)
         {
-            value = sanitize ? Sanitize(value) : value;
-            value = string.Format("([^" + value + "]+)");
-            return Add(value, false);
+            var somethingBut = sanitize ? Sanitize(value) : value;
+            somethingBut = string.Format("([^" + somethingBut + "]+)");
+            return Add(somethingBut, false);
+        }
+
+        public VerbalExpressions SomethingBut(string value)
+        {
+            var somethingBut =Sanitize(value);
+            somethingBut = string.Format("([^" + somethingBut + "]+)");
+            return Add(somethingBut, false);
         }
 
         public VerbalExpressions Replace(string value)
@@ -228,16 +276,28 @@ namespace CSharpVerbalExpressions
             return Add(@"\w+", false);
         }
 
-        public VerbalExpressions AnyOf(string value, bool sanitize = true)
+        public VerbalExpressions AnyOf(string value, bool sanitize)
         {
             if (string.IsNullOrEmpty(value))
             {
                 throw new ArgumentNullException("value");
             }
 
-            value = sanitize ? Sanitize(value) : value;
-            value = string.Format("[{0}]", value);
-            return Add(value, false);
+            var anyOf = sanitize ? Sanitize(value) : value;
+            anyOf = string.Format("[{0}]", anyOf);
+            return Add(anyOf, false);
+        }
+
+        public VerbalExpressions AnyOf(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                throw new ArgumentNullException("value");
+            }
+
+            var anyOf = Sanitize(value);
+            anyOf = string.Format("[{0}]", anyOf);
+            return Add(anyOf, false);
         }
 
         public VerbalExpressions Any(string value)
@@ -265,14 +325,8 @@ namespace CSharpVerbalExpressions
                 }
 
                 string casted = argument.ToString();
-                if (string.IsNullOrEmpty(casted))
-                {
-                    return string.Empty;
-                }
-                else
-                {
-                    return Sanitize(casted);
-                }
+
+                return string.IsNullOrEmpty(casted) ?  string.Empty : Sanitize(casted);
             })
                 .Where(sanitizedString =>
                     !string.IsNullOrEmpty(sanitizedString))
@@ -295,11 +349,10 @@ namespace CSharpVerbalExpressions
             for (int _from = 0; _from < sanitizedStrings.Length; _from += 2)
             {
                 int _to = _from + 1;
-                if (sanitizedStrings.Length <= _to)
+                if (sanitizedStrings.Length > _to)
                 {
-                    break;
-                }
-                sb.AppendFormat("{0}-{1}", sanitizedStrings[_from], sanitizedStrings[_to]);
+                    sb.AppendFormat("{0}-{1}", sanitizedStrings[_from], sanitizedStrings[_to]);
+                }            
             }
             sb.Append("]");
 
@@ -311,17 +364,30 @@ namespace CSharpVerbalExpressions
             return Add(sb.ToString(), false);
         }
 
-        public VerbalExpressions Multiple(string value, bool sanitize = true)
+        public VerbalExpressions Multiple(string value, bool sanitize)
         {
             if (string.IsNullOrEmpty(value))
             {
                 throw new ArgumentNullException("value");
             }
 
-            value = sanitize ? this.Sanitize(value) : value;
-            value = string.Format(@"({0})+", value);
+            var multiple = sanitize ? this.Sanitize(value) : value;
+            multiple = string.Format(@"({0})+", multiple);
 
-            return Add(value, false);
+            return Add(multiple, false);
+        }
+
+        public VerbalExpressions Multiple(string value)
+        {
+            if (string.IsNullOrEmpty(value))
+            {
+                throw new ArgumentNullException("value");
+            }
+
+            var multiple =this.Sanitize(value);
+            multiple = string.Format(@"({0})+", multiple);
+
+            return Add(multiple, false);
         }
 
         public VerbalExpressions Or(CommonRegex commonRegex)
@@ -329,12 +395,20 @@ namespace CSharpVerbalExpressions
             return Or(commonRegex.Name, false);
         }
 
-        public VerbalExpressions Or(string value, bool sanitize = true)
+        public VerbalExpressions Or(string value, bool sanitize)
         {
             _prefixes.Append("(");
             _suffixes.Insert(0, ")");
             _source.Append(")|(");
             return Add(value, sanitize);
+        }
+
+        public VerbalExpressions Or(string value)
+        {
+            _prefixes.Append("(");
+            _suffixes.Insert(0, ")");
+            _source.Append(")|(");
+            return Add(value);
         }
 
         public VerbalExpressions BeginCapture()
@@ -408,7 +482,7 @@ namespace CSharpVerbalExpressions
             return this;
         }
 
-        public VerbalExpressions WithAnyCase(bool enable = true)
+        public VerbalExpressions WithAnyCase(bool enable)
         {
             if (enable)
             {
@@ -418,6 +492,12 @@ namespace CSharpVerbalExpressions
             {
                 RemoveModifier('i');
             }
+            return this;
+        }
+
+        public VerbalExpressions WithAnyCase()
+        {
+            AddModifier('i');
             return this;
         }
 

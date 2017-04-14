@@ -1,15 +1,37 @@
-﻿using System;
+﻿/*
+ * SonarQube, open source software quality management tool.
+ * Copyright (C) 2008-2013 SonarSource
+ * mailto:contact AT sonarsource DOT com
+ *
+ * SonarQube is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3 of the License, or (at your option) any later version.
+ *
+ * SonarQube is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program; if not, write to the Free Software Foundation,
+ * Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+ */
+
+using System;
 using System.Text.RegularExpressions;
 
 namespace CSharpVerbalExpressions
 {
     public sealed class RegexCache
     {
+        private static readonly object lock_object = new object();
+
         private bool hasValue;
         private Key key;
         private Regex regex;
         
-        private class Key
+        private class Key : IEquatable<Key>
         {
             public Key(string pattern, RegexOptions options)
             {
@@ -32,6 +54,11 @@ namespace CSharpVerbalExpressions
             {
                 return this.Pattern.GetHashCode() ^ this.Options.GetHashCode();
             }
+
+            public bool Equals(Key other)
+            {
+                return other.Pattern == this.Pattern && other.Options == this.Options;
+            }
         }
 
         /// <summary>
@@ -42,9 +69,12 @@ namespace CSharpVerbalExpressions
         /// <returns>The calculated or cached value.</returns>
         public Regex Get(string pattern, RegexOptions options)
         {
-            if (pattern == null) throw new ArgumentNullException("pattern");
+            if (pattern == null)
+            {
+                throw new ArgumentNullException("pattern");
+            }
 
-            lock (this)
+            lock (lock_object)
             {
                 var current = new Key(pattern, options);
                 if (this.hasValue && current.Equals(this.key))

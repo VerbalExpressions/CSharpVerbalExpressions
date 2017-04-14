@@ -1,0 +1,8 @@
+language: csharp
+solution: VerbalExpressions.sln
+install:
+  - nuget restore  VerbalExpressions.sln
+  - nuget install NUnit.Runners -Version 3.2.0 -OutputDirectory testrunner
+script:
+  - xbuild /p:Configuration=Release  VerbalExpressions.sln
+  - mono ./testrunner/NUnit.ConsoleRunner.3.2.0/tools/nunit3-console.exe ./VerbalExpressionsUnitTests/bin/Release/VerbalExpressionsUnitTests.dll
