@@ -5,4 +5,4 @@ install:
   - nuget install NUnit.Runners -Version 3.0.1 -OutputDirectory testrunner
 script:
   - xbuild /p:Configuration=Release  VerbalExpressions.sln
-  - mono ./testrunner/NUnit.Runners.3.0.1/tools/nunit-console.exe ./VerbalExpressionsUnitTests/bin/Release/VerbalExpressionsUnitTests.dll
+  - mono ./testrunner/NUnit.ConsoleRunner.3.0.1/tools/nunit-console.exe ./VerbalExpressionsUnitTests/bin/Release/VerbalExpressionsUnitTests.dll
