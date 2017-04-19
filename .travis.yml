@@ -5,4 +5,4 @@ install:
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
 script:
   - xbuild /p:Configuration=Debug VerbalExpressions.sln
-  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./VerbalExpressionsUnitTests/VerbalExpressionsUnitTest.csproj
+  - mono ./testrunner/NUnit.Runners.2.6.4/tools/nunit-console.exe ./VerbalExpressionsUnitTests/bin/Debug/VerbalExpressionsUnitTest.csproj
