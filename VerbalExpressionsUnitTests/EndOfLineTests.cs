@@ -12,7 +12,7 @@ namespace VerbalExpressionsUnitTests
             var verbEx = VerbalExpressions.DefaultExpression;
             verbEx.Add(".com").EndOfLine();
 
-            var isMatch = verbEx.IsMatch("www.google.com");
+            var isMatch = verbEx.IsMatch("www.google.com/");
             Assert.IsTrue(isMatch, "Should match '.com' in end");
         }
 
