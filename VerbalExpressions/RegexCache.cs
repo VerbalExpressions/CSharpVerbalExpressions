@@ -5,7 +5,6 @@ namespace CSharpVerbalExpressions
 {
     public sealed class RegexCache
     {
-        private bool hasValue;
         private Key key;
         private Regex regex;
         
@@ -47,14 +46,13 @@ namespace CSharpVerbalExpressions
             lock (this)
             {
                 var current = new Key(pattern, options);
-                if (this.hasValue && current.Equals(this.key))
+                if (this.regex != null && current.Equals(this.key))
                 {
                     return this.regex;
                 }
 
                 this.regex = new Regex(pattern, options);
                 this.key = current;
-                this.hasValue = true;
                 return this.regex;
             }
         }
