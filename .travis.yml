@@ -1,5 +1,8 @@
 language: csharp
 solution: VerbalExpressions.sln
+branches:
+  only:
+  - metz
 install:
   - nuget restore VerbalExpressions.sln
   - nuget install NUnit.Runners -Version 2.6.4 -OutputDirectory testrunner
