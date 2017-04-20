@@ -1,0 +1,10 @@
+{
+  "ServerUri": "https://sonarqube.com/dashboard?id=IET-CSharpVerbalExpressions:iet_main/",
+  "ProjectKey": "IET-CSharpVerbalExpressions:iet_main",
+  "Profiles": {
+    "CSharp": {
+      "ProfileKey": "cs-sonar-way-31865",
+      "ProfileTimestamp": "2017-04-14T12:34:00+02:00"
+    }
+  }
+}

@@ -1,0 +1,4 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="SonarQube - CSharpVerbalExpressions iet_main Sonar way" ToolsVersion="15.0">
+  <Include Path="..\sonarqube\iet-csharpverbalexpressions_iet_maincsharp.ruleset" Action="Default" />
+</RuleSet>
