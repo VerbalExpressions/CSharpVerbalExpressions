@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RuleSet Name="SonarQube - CSharpVerbalExpressions iet_main Sonar way" Description="This rule set was automatically generated from SonarQube.&#xD;&#xA;https://sonarqube.com/dashboard?id=IET-CSharpVerbalExpressions:iet_main/profiles/show?key=cs-sonar-way-31865" ToolsVersion="15.0">
+  <Rules AnalyzerId="SonarAnalyzer.CSharp" RuleNamespace="SonarAnalyzer.CSharp">
+    <Rule Id="S100" Action="Warning" />
+    <Rule Id="S103" Action="Warning" />
+    <Rule Id="S104" Action="Warning" />
+    <Rule Id="S105" Action="Warning" />
+    <Rule Id="S1067" Action="Warning" />
+    <Rule Id="S107" Action="Warning" />
+    <Rule Id="S1109" Action="Warning" />
+    <Rule Id="S1135" Action="Warning" />
+    <Rule Id="S121" Action="Warning" />
+    <Rule Id="S122" Action="Warning" />
+    <Rule Id="S1226" Action="Warning" />
+    <Rule Id="S1227" Action="Warning" />
+    <Rule Id="S126" Action="Warning" />
+    <Rule Id="S127" Action="Warning" />
+    <Rule Id="S1301" Action="Warning" />
+    <Rule Id="S1309" Action="Warning" />
+    <Rule Id="S131" Action="Warning" />
+    <Rule Id="S1313" Action="Warning" />
+    <Rule Id="S134" Action="Warning" />
+    <Rule Id="S1451" Action="Warning" />
+    <Rule Id="S1479" Action="Warning" />
+    <Rule Id="S1541" Action="Warning" />
+    <Rule Id="S1659" Action="Warning" />
+    <Rule Id="S1694" Action="Warning" />
+    <Rule Id="S1697" Action="Warning" />
+    <Rule Id="S1858" Action="Warning" />
+    <Rule Id="S1994" Action="Warning" />
+    <Rule Id="S2070" Action="Warning" />
+    <Rule Id="S2156" Action="Warning" />
+    <Rule Id="S2197" Action="Warning" />
+    <Rule Id="S2228" Action="Warning" />
+    <Rule Id="S2325" Action="Warning" />
+    <Rule Id="S2330" Action="Warning" />
+    <Rule Id="S2333" Action="Warning" />
+    <Rule Id="S2339" Action="Warning" />
+    <Rule Id="S2357" Action="Warning" />
+    <Rule Id="S2360" Action="Warning" />
+    <Rule Id="S2387" Action="Warning" />
+    <Rule Id="S2551" Action="Warning" />
+    <Rule Id="S2674" Action="Warning" />
+    <Rule Id="S2737" Action="Warning" />
+    <Rule Id="S2760" Action="Warning" />
+    <Rule Id="S2931" Action="Warning" />
+    <Rule Id="S2952" Action="Warning" />
+    <Rule Id="S2955" Action="Warning" />
+    <Rule Id="S3052" Action="Warning" />
+    <Rule Id="S3215" Action="Warning" />
+    <Rule Id="S3216" Action="Warning" />
+    <Rule Id="S3235" Action="Warning" />
+    <Rule Id="S3240" Action="Warning" />
+    <Rule Id="S3253" Action="Warning" />
+    <Rule Id="S3254" Action="Warning" />
+    <Rule Id="S3257" Action="Warning" />
+    <Rule Id="S3441" Action="Warning" />
+    <Rule Id="S3532" Action="Warning" />
+    <Rule Id="S3872" Action="Warning" />
+    <Rule Id="S3874" Action="Warning" />
+    <Rule Id="S3876" Action="Warning" />
+    <Rule Id="S3880" Action="Warning" />
+    <Rule Id="S3898" Action="Warning" />
+    <Rule Id="S3902" Action="Warning" />
+    <Rule Id="S818" Action="Warning" />
+  </Rules>
+</RuleSet>
