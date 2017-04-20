@@ -108,6 +108,15 @@ namespace CSharpVerbalExpressions
 
         #region Expression Modifiers
 
+        public VerbalExpressions Add(string value)
+        {
+            if (object.ReferenceEquals(value, null))
+            {
+                throw new ArgumentNullException("value");
+            }
+
+            return Add(value, true);
+        }
 
         public VerbalExpressions Add(CommonRegex commonRegex)
         {
