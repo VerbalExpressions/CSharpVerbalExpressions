@@ -5,4 +5,5 @@ before_build:
 
 build:
   verbosity: minimal
-  publish_wap: true
+  project: CSharpVerbalExpressions.sln
+  publish_nuget: true
