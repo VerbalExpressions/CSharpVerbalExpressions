@@ -1,5 +1,8 @@
-CSharpVerbalExpressions
+CSharpVerbalExpressions [![Build Status](https://travis-ci.org/IETTeam/CSharpVerbalExpressions.svg?branch=master)](https://travis-ci.org/IETTeam/CSharpVerbalExpressions)
+[![codecov](https://codecov.io/gh/IETTeam/CSharpVerbalExpressions/branch/master/graph/badge.svg)](https://codecov.io/gh/IETTeam/CSharpVerbalExpressions)
 =====================
+
+# This forked repository is for IET homework only!
 
 ## CSharp Regular Expressions made easy
 VerbalExpressions is a CSharp library that helps to construct difficult regular expressions.
