@@ -1,4 +1,5 @@
 CSharpVerbalExpressions [![Build Status](https://travis-ci.org/IETTeam/CSharpVerbalExpressions.svg?branch=master)](https://travis-ci.org/IETTeam/CSharpVerbalExpressions)
+[![codecov](https://codecov.io/gh/spurger/CSharpVerbalExpressions/branch/master/graph/badge.svg)](https://codecov.io/gh/spurger/CSharpVerbalExpressions)
 =====================
 
 # This forked repository is for IET homework only!
