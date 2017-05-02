@@ -1,0 +1,18 @@
+version: 1.0.{build}
+configuration:
+  - Release
+
+before_build:
+  - nuget restore
+  
+build:
+  verbosity: minimal
+  project: VerbalExpressions.sln
+  
+test:
+  assemblies:
+    - '**\VerbalExpressionsUnitTests.dll'
+    
+artifacts:  
+- path: '**\*.nupkg'
+  name: NuGet
