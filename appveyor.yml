@@ -13,6 +13,12 @@ test:
   assemblies:
     - '**\VerbalExpressionsUnitTests.dll'
     
+after_test: 
+    - .\packages\OpenCover.4.6.519\tools\OpenCover.Console.exe -register:spurger -target:"C:\projects\csharpverbalexpressions\packages\NUnit.ConsoleRunner.3.6.1\tools\nunit3-console.exe" -targetargs:"/noresults /noisolation /testcontainer:"".\VerbalExpressionsUnitTests\bin\Release\VerbalExpressionsUnitTests.dll" -filter:"+[VerbalExpressions]VerbalExpressions* -output:.\VerbalExpressions_coverage.xml
+    - "SET PATH=C:\\Python34;C:\\Python34\\Scripts;%PATH%"
+    - pip install codecov
+    - codecov -f "VerbalExpressions_coverage.xml"
+    
 artifacts:  
 - path: '**\*.nupkg'
   name: NuGet
