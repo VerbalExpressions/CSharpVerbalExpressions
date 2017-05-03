@@ -1,0 +1,9 @@
+configuration: Release
+
+before_build:
+  - nuget restore
+
+build:
+  verbosity: minimal
+  project: CSharpVerbalExpressions.sln
+  publish_nuget: true
