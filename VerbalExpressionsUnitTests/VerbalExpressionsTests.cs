@@ -167,5 +167,36 @@ namespace VerbalExpressionsUnitTests
             regex = verbEx.ToRegex();
             Assert.IsFalse(regex.Options.HasFlag(RegexOptions.Multiline), "RegexOptions should now have been removed");
         }
+
+        [Test]
+        public void IgnoreMaybeAfterAnythingBut()
+        {
+            //Arrange
+            var verbExWithMaybe = VerbalExpressions.DefaultExpression
+                .StartOfLine()
+                .Then("http")
+                .Maybe("s")
+                .Then("://")
+                .Maybe("www.")
+                .AnythingBut(" ")
+                .Maybe("/")
+                .EndOfLine();
+
+            var verbExWithoutMaybe = VerbalExpressions.DefaultExpression
+                .StartOfLine()
+                .Then("http")
+                .Maybe("s")
+                .Then("://")
+                .Maybe("www.")
+                .AnythingBut(" ")
+                .EndOfLine();
+
+            //Act
+            var regex = verbExWithMaybe.ToRegex();
+            var expectedRegex = verbExWithoutMaybe.ToRegex();
+
+            //Assert
+            Assert.AreEqual(expectedRegex.ToString(), regex.ToString());
+        }
     }
 }

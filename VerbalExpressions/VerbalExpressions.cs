@@ -1,20 +1,6 @@
-/*!
- * CSharpVerbalExpressions v0.1
- * https://github.com/VerbalExpressions/CSharpVerbalExpressions
- * 
- * @psoholt
- * 
- * Date: 2013-07-26
- * 
- * Additions and Refactoring
- * @alexpeta
- * 
- * Date: 2013-08-06
- */
-
 using System;
-using System.Text;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 
 namespace CSharpVerbalExpressions
@@ -24,41 +10,35 @@ namespace CSharpVerbalExpressions
         #region Statics
 
         /// <summary>
-        /// Returns a default instance of VerbalExpressions
-        /// having the Multiline option enabled
+        ///     Returns a default instance of VerbalExpressions
+        ///     having the Multiline option enabled
         /// </summary>
-        public static VerbalExpressions DefaultExpression
-        {
-            get { return new VerbalExpressions(); }
-        }
+        public static VerbalExpressions DefaultExpression => new VerbalExpressions();
 
         #endregion Statics
 
         #region Private Members
 
         private readonly RegexCache regexCache = new RegexCache();
-        private StringBuilder _prefixes = new StringBuilder();
-        private StringBuilder _source = new StringBuilder();
-        private StringBuilder _suffixes = new StringBuilder();
+        private readonly StringBuilder _prefixes = new StringBuilder();
+        private readonly StringBuilder _source = new StringBuilder();
+        private readonly StringBuilder _suffixes = new StringBuilder();
 
         private RegexOptions _modifiers = RegexOptions.Multiline;
-        
+
+        private bool isPreviousExpressionAnythingBut;
+
         #endregion Private Members
 
         #region Private Properties
 
-        private string RegexString
-        {
-            get { return new StringBuilder().Append(_prefixes).Append(_source).Append(_suffixes).ToString();}
-        }
+        private string RegexString =>
+            new StringBuilder().Append(_prefixes).Append(_source).Append(_suffixes).ToString();
 
-        private Regex PatternRegex
-        {
-            get { return regexCache.Get(this.RegexString, _modifiers); }
-        }
+        private Regex PatternRegex => regexCache.Get(RegexString, _modifiers);
 
         #endregion Private Properties
-        
+
         #region Public Methods
 
         #region Helpers
@@ -66,9 +46,7 @@ namespace CSharpVerbalExpressions
         public string Sanitize(string value)
         {
             if (string.IsNullOrEmpty(value))
-            {
                 throw new ArgumentNullException("value");
-            }
 
             return Regex.Escape(value);
         }
@@ -108,10 +86,8 @@ namespace CSharpVerbalExpressions
 
         public VerbalExpressions Add(string value)
         {
-            if (object.ReferenceEquals(value, null))
-            {
+            if (ReferenceEquals(value, null))
                 throw new ArgumentNullException("value");
-            }
 
             return Add(value, true);
         }
@@ -126,6 +102,8 @@ namespace CSharpVerbalExpressions
             if (value == null)
                 throw new ArgumentNullException("value must be provided");
 
+            if (isPreviousExpressionAnythingBut) return this;
+
             value = sanitize ? Sanitize(value) : value;
             _source.Append(value);
             return this;
@@ -133,13 +111,13 @@ namespace CSharpVerbalExpressions
 
         public VerbalExpressions StartOfLine(bool enable = true)
         {
-            _prefixes.Append(enable ? "^" : String.Empty);
+            _prefixes.Append(enable ? "^" : string.Empty);
             return this;
         }
 
         public VerbalExpressions EndOfLine(bool enable = true)
         {
-            _suffixes.Append(enable ? "$" : String.Empty);
+            _suffixes.Append(enable ? "$" : string.Empty);
             return this;
         }
 
@@ -169,7 +147,7 @@ namespace CSharpVerbalExpressions
 
         public VerbalExpressions Maybe(CommonRegex commonRegex)
         {
-            return Maybe(commonRegex.Name, sanitize: false);
+            return Maybe(commonRegex.Name, false);
         }
 
         public VerbalExpressions Anything()
@@ -181,6 +159,7 @@ namespace CSharpVerbalExpressions
         {
             value = sanitize ? Sanitize(value) : value;
             value = string.Format("([^{0}]*)", value);
+            isPreviousExpressionAnythingBut = true;
             return Add(value, false);
         }
 
@@ -198,12 +177,10 @@ namespace CSharpVerbalExpressions
 
         public VerbalExpressions Replace(string value)
         {
-            string whereToReplace = PatternRegex.ToString();
+            var whereToReplace = PatternRegex.ToString();
 
             if (whereToReplace.Length != 0)
-            {
                 _source.Replace(whereToReplace, value);
-            }
 
             return this;
         }
@@ -231,9 +208,7 @@ namespace CSharpVerbalExpressions
         public VerbalExpressions AnyOf(string value, bool sanitize = true)
         {
             if (string.IsNullOrEmpty(value))
-            {
                 throw new ArgumentNullException("value");
-            }
 
             value = sanitize ? Sanitize(value) : value;
             value = string.Format("[{0}]", value);
@@ -247,66 +222,47 @@ namespace CSharpVerbalExpressions
 
         public VerbalExpressions Range(params object[] arguments)
         {
-            if (object.ReferenceEquals(arguments, null))
-            {
+            if (ReferenceEquals(arguments, null))
                 throw new ArgumentNullException("arguments");
-            }
 
             if (arguments.Length == 1)
-            {
                 throw new ArgumentOutOfRangeException("arguments");
-            }
 
-            string[] sanitizedStrings = arguments.Select(argument =>
-            {
-                if (object.ReferenceEquals(argument, null))
+            var sanitizedStrings = arguments.Select(argument =>
                 {
-                    return string.Empty;
-                }
+                    if (ReferenceEquals(argument, null))
+                        return string.Empty;
 
-                string casted = argument.ToString();
-                if (string.IsNullOrEmpty(casted))
-                {
-                    return string.Empty;
-                }
-                else
-                {
+                    var casted = argument.ToString();
+                    if (string.IsNullOrEmpty(casted))
+                        return string.Empty;
                     return Sanitize(casted);
-                }
-            })
+                })
                 .Where(sanitizedString =>
                     !string.IsNullOrEmpty(sanitizedString))
                 .OrderBy(s => s)
                 .ToArray();
 
             if (sanitizedStrings.Length > 3)
-            {
                 throw new ArgumentOutOfRangeException("arguments");
-            }
 
             if (!sanitizedStrings.Any())
-            {
                 return this;
-            }
 
-            bool hasOddNumberOfParams = (sanitizedStrings.Length % 2) > 0;
+            var hasOddNumberOfParams = sanitizedStrings.Length % 2 > 0;
 
-            StringBuilder sb = new StringBuilder("[");
-            for (int _from = 0; _from < sanitizedStrings.Length; _from += 2)
+            var sb = new StringBuilder("[");
+            for (var _from = 0; _from < sanitizedStrings.Length; _from += 2)
             {
-                int _to = _from + 1;
+                var _to = _from + 1;
                 if (sanitizedStrings.Length <= _to)
-                {
                     break;
-                }
                 sb.AppendFormat("{0}-{1}", sanitizedStrings[_from], sanitizedStrings[_to]);
             }
             sb.Append("]");
 
             if (hasOddNumberOfParams)
-            {
                 sb.AppendFormat("|{0}", sanitizedStrings.Last());
-            }
 
             return Add(sb.ToString(), false);
         }
@@ -314,11 +270,9 @@ namespace CSharpVerbalExpressions
         public VerbalExpressions Multiple(string value, bool sanitize = true)
         {
             if (string.IsNullOrEmpty(value))
-            {
                 throw new ArgumentNullException("value");
-            }
 
-            value = sanitize ? this.Sanitize(value) : value;
+            value = sanitize ? Sanitize(value) : value;
             value = string.Format(@"({0})+", value);
 
             return Add(value, false);
@@ -411,40 +365,30 @@ namespace CSharpVerbalExpressions
         public VerbalExpressions WithAnyCase(bool enable = true)
         {
             if (enable)
-            {
                 AddModifier('i');
-            }
             else
-            {
                 RemoveModifier('i');
-            }
             return this;
         }
 
         public VerbalExpressions UseOneLineSearchOption(bool enable)
         {
             if (enable)
-            {
                 RemoveModifier('m');
-            }
             else
-            {
                 AddModifier('m');
-            }
 
             return this;
         }
 
         public VerbalExpressions WithOptions(RegexOptions options)
         {
-            this._modifiers = options;
+            _modifiers = options;
             return this;
         }
 
         #endregion Expression Options Modifiers
 
         #endregion Public Methods
-
-
     }
 }
