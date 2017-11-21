@@ -42,14 +42,16 @@ namespace CSharpVerbalExpressions
         private StringBuilder _suffixes = new StringBuilder();
 
         private RegexOptions _modifiers = RegexOptions.Multiline;
-        
+
+        private bool isPreviousExpressionAnythingBut = false;
+
         #endregion Private Members
 
         #region Private Properties
 
         private string RegexString
         {
-            get { return new StringBuilder().Append(_prefixes).Append(_source).Append(_suffixes).ToString();}
+            get { return new StringBuilder().Append(_prefixes).Append(_source).Append(_suffixes).ToString(); }
         }
 
         private Regex PatternRegex
@@ -58,7 +60,7 @@ namespace CSharpVerbalExpressions
         }
 
         #endregion Private Properties
-        
+
         #region Public Methods
 
         #region Helpers
@@ -126,6 +128,8 @@ namespace CSharpVerbalExpressions
             if (value == null)
                 throw new ArgumentNullException("value must be provided");
 
+            if (isPreviousExpressionAnythingBut) return this;
+
             value = sanitize ? Sanitize(value) : value;
             _source.Append(value);
             return this;
@@ -181,6 +185,7 @@ namespace CSharpVerbalExpressions
         {
             value = sanitize ? Sanitize(value) : value;
             value = string.Format("([^{0}]*)", value);
+            isPreviousExpressionAnythingBut = true;
             return Add(value, false);
         }
 
