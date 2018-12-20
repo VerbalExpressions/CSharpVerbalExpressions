@@ -33,7 +33,7 @@ namespace VerbalExpressionsUnitTests
             // Act
             verbEx.BeginCapture()
                   .Add("A")
-                  .RepeatPrevious(2,4)
+                  .RepeatPrevious(2, 4)
                   .EndCapture();
 
             // Assert
