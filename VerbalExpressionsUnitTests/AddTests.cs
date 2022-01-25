@@ -7,6 +7,7 @@ namespace VerbalExpressionsUnitTests
     [TestFixture]
     public class AddTests
     {
+        //hello world
         [Test]
         public void Add_WhenNullStringPassedAsParameter_ShouldThrowNullArgumentException()
         {
