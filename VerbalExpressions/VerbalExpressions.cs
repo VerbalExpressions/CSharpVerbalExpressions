@@ -372,6 +372,63 @@ namespace CSharpVerbalExpressions
 
         #endregion Expression Modifiers
 
+        #region Character Classes
+
+        public VerbalExpressions Letter()
+        {
+            return Add("[a-zA-Z]", false);
+        }
+
+        public VerbalExpressions UpperCaseLetter()
+        {
+            return Add("[A-Z]", false);
+        }
+
+        public VerbalExpressions LowerCaseLetter()
+        {
+            return Add("[a-z]", false);
+        }
+
+        public VerbalExpressions Digit()
+        {
+            return Add(@"\d", false);
+        }
+
+        public VerbalExpressions WordBoundary()
+        {
+            return Add(@"\b", false);
+        }
+
+        #endregion Character Classes
+
+        #region Lookaround
+
+        public VerbalExpressions LookAhead(string value, bool sanitize = true)
+        {
+            value = sanitize ? Sanitize(value) : value;
+            return Add("(?=" + value + ")", false);
+        }
+
+        public VerbalExpressions NegativeLookAhead(string value, bool sanitize = true)
+        {
+            value = sanitize ? Sanitize(value) : value;
+            return Add("(?!" + value + ")", false);
+        }
+
+        public VerbalExpressions LookBehind(string value, bool sanitize = true)
+        {
+            value = sanitize ? Sanitize(value) : value;
+            return Add("(?<=" + value + ")", false);
+        }
+
+        public VerbalExpressions NegativeLookBehind(string value, bool sanitize = true)
+        {
+            value = sanitize ? Sanitize(value) : value;
+            return Add("(?<!" + value + ")", false);
+        }
+
+        #endregion Lookaround
+
         #region Expression Options Modifiers
 
         public VerbalExpressions AddModifier(char modifier)
