@@ -8,14 +8,34 @@ namespace VerbalExpressionsUnitTests
     public class RangeTests
     {
         [Test]
-        public void Range_WhenTooManyItemsInArray_ShouldThrowArgumentOutOfRangeException()
+        public void Range_WhenMultiplePairsInArray_ShouldProduceMultipleRanges()
         {
+            //Arrange
             var verbEx = VerbalExpressions.DefaultExpression;
-            object[] range = new object[4] { 1, 6, 7, 12 };
+            object[] range = new object[4] { 'a', 'f', 0, 9 };
+            string expectedExpression = "[a-f0-9]";
 
             //Act
+            verbEx.Range(range);
+
             //Assert
-            Assert.Throws<ArgumentOutOfRangeException>(() => verbEx.Range(range));
+            Assert.AreEqual(expectedExpression, verbEx.ToString());
+        }
+
+        [Test]
+        public void Range_WhenMultiplePairsInArray_ShouldMatchCorrectly()
+        {
+            //Arrange
+            var verbEx = VerbalExpressions.DefaultExpression;
+            object[] range = new object[4] { 'a', 'z', 0, 9 };
+
+            //Act
+            verbEx.Range(range);
+
+            //Assert
+            Assert.IsTrue(verbEx.IsMatch("test"));
+            Assert.IsTrue(verbEx.IsMatch("7"));
+            Assert.IsFalse(verbEx.IsMatch("!@#"));
         }
 
         [Test]

@@ -266,13 +266,7 @@ namespace CSharpVerbalExpressions
             })
                 .Where(sanitizedString =>
                     !string.IsNullOrEmpty(sanitizedString))
-                .OrderBy(s => s)
                 .ToArray();
-
-            if (sanitizedStrings.Length > 3)
-            {
-                throw new ArgumentOutOfRangeException("arguments");
-            }
 
             if (!sanitizedStrings.Any())
             {
@@ -289,7 +283,31 @@ namespace CSharpVerbalExpressions
                 {
                     break;
                 }
-                sb.AppendFormat("{0}-{1}", sanitizedStrings[_from], sanitizedStrings[_to]);
+
+                string left = sanitizedStrings[_from];
+                string right = sanitizedStrings[_to];
+
+                // Sort within pair: use numeric comparison if both are numbers,
+                // otherwise fall back to ordinal string comparison
+                int leftNum, rightNum;
+                bool shouldSwap;
+                if (int.TryParse(left, out leftNum) && int.TryParse(right, out rightNum))
+                {
+                    shouldSwap = leftNum > rightNum;
+                }
+                else
+                {
+                    shouldSwap = string.Compare(left, right, StringComparison.Ordinal) > 0;
+                }
+
+                if (shouldSwap)
+                {
+                    sb.AppendFormat("{0}-{1}", right, left);
+                }
+                else
+                {
+                    sb.AppendFormat("{0}-{1}", left, right);
+                }
             }
             sb.Append("]");
 
