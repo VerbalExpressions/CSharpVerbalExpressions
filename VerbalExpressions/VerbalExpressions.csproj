@@ -5,7 +5,7 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 
     <PackageId>VerbalExpressions-official</PackageId>
-    <Version>1.0.0</Version>
+    <Version>0.3.0</Version>
     <Authors>VerbalExpression community</Authors>
     <Description>A fluent API for building regular expressions in C#. Official VerbalExpressions package.</Description>
     <PackageProjectUrl>https://github.com/VerbalExpressions/CSharpVerbalExpressions</PackageProjectUrl>
