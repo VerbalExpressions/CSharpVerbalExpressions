@@ -1,0 +1,57 @@
+name: Publish NuGet
+
+on:
+  release:
+    types: [published]
+
+env:
+  DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
+  DOTNET_NOLOGO: true
+  NUGET_OUTPUT: ${{ github.workspace }}/nuget
+
+jobs:
+  pack:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Test
+        run: dotnet test --configuration Release
+
+      - name: Pack
+        run: dotnet pack VerbalExpressions/VerbalExpressions.csproj -c Release -o "$NUGET_OUTPUT"
+
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuget
+          path: ${{ env.NUGET_OUTPUT }}/*.nupkg
+
+  publish:
+    runs-on: ubuntu-latest
+    needs: pack
+    steps:
+      - name: Download package
+        uses: actions/download-artifact@v4
+        with:
+          name: nuget
+          path: ${{ env.NUGET_OUTPUT }}
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Push to NuGet.org
+        run: |
+          for pkg in $NUGET_OUTPUT/*.nupkg; do
+            dotnet nuget push "$pkg" \
+              --api-key "${{ secrets.NUGET_APIKEY }}" \
+              --source https://api.nuget.org/v3/index.json \
+              --skip-duplicate
+          done

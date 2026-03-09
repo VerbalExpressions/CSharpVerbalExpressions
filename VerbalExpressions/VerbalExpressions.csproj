@@ -1,7 +1,24 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard1.0</TargetFramework>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+
+    <PackageId>VerbalExpressions-official</PackageId>
+    <Version>0.3.0</Version>
+    <Authors>VerbalExpression community</Authors>
+    <Description>A fluent API for building regular expressions in C#. Official VerbalExpressions package.</Description>
+    <PackageProjectUrl>https://github.com/VerbalExpressions/CSharpVerbalExpressions</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/VerbalExpressions/CSharpVerbalExpressions</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>VerbalExpression;Regex;RegularExpressions;FluentAPI</PackageTags>
+    <Copyright>Copyright (c) Peder Søholt</Copyright>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
 
 </Project>
