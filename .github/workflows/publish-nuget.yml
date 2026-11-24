@@ -3,6 +3,11 @@ name: Publish NuGet
 on:
   release:
     types: [published]
+  # Manual re-publish (for example if a release run failed). --skip-duplicate makes it safe.
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 env:
   DOTNET_SKIP_FIRST_TIME_EXPERIENCE: 1
@@ -35,6 +40,9 @@ jobs:
   publish:
     runs-on: ubuntu-latest
     needs: pack
+    permissions:
+      contents: read
+      id-token: write # Required for NuGet Trusted Publishing (OIDC)
     steps:
       - name: Download package
         uses: actions/download-artifact@v4
@@ -47,11 +55,21 @@ jobs:
         with:
           dotnet-version: 10.0.x
 
+      # Trusted Publishing: exchanges the GitHub OIDC token for a short-lived API key.
+      # The matching policy is configured on nuget.org for owner psoholt.
+      - name: NuGet login
+        id: login
+        uses: NuGet/login@8d196754b4036150537f80ac539e15c2f1028841 # v1.2.0
+        with:
+          user: psoholt
+
       - name: Push to NuGet.org
+        env:
+          NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
         run: |
           for pkg in $NUGET_OUTPUT/*.nupkg; do
             dotnet nuget push "$pkg" \
-              --api-key "${{ secrets.NUGET_APIKEY }}" \
+              --api-key "$NUGET_API_KEY" \
               --source https://api.nuget.org/v3/index.json \
               --skip-duplicate
           done
