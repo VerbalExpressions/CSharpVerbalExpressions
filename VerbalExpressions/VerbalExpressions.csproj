@@ -5,7 +5,9 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 
     <PackageId>VerbalExpressions-official</PackageId>
-    <Version>0.3.0</Version>
+    <Version>0.4.0</Version>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageReleaseNotes>0.4.0: API parity with the Java and JavaScript implementations (OneOrMore, ZeroOrMore, AtLeast, Count, Multiple with counts, OneOf, BeginGroup/EndGroup, Add(VerbalExpressions), Not, SearchOneLine, TestExact, Replace(input, replacement), WordChar, NonWordChar, NonDigit, Whitespace, NonWhitespace, Space, NonSpace). XML documentation for IntelliSense. Fixes: Tab() now matches a real tab character, SomethingBut() no longer throws on '{' or '}', CommonRegex.Url no longer contains invisible characters.</PackageReleaseNotes>
     <Authors>VerbalExpression community</Authors>
     <Description>A fluent API for building regular expressions in C#. Official VerbalExpressions package.</Description>
     <PackageProjectUrl>https://github.com/VerbalExpressions/CSharpVerbalExpressions</PackageProjectUrl>

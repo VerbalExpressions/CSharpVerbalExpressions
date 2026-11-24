@@ -3,6 +3,10 @@ using System.Text.RegularExpressions;
 
 namespace CSharpVerbalExpressions
 {
+    /// <summary>
+    /// Caches the most recently compiled <see cref="Regex"/> so it is only rebuilt
+    /// when the pattern or options change. Thread-safe.
+    /// </summary>
     public sealed class RegexCache
     {
         private bool hasValue;

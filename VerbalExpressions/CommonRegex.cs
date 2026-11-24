@@ -15,6 +15,7 @@ namespace CSharpVerbalExpressions
         #endregion Private Members
 
         #region Public Properties
+        /// <summary>The regex pattern.</summary>
         public string Name
         {
             get
@@ -22,6 +23,7 @@ namespace CSharpVerbalExpressions
                 return name;
             }
         }
+        /// <summary>A numeric identifier for the pattern.</summary>
         public int Value
         {
             get
@@ -32,7 +34,9 @@ namespace CSharpVerbalExpressions
         #endregion Public Properties
 
         #region Statics
-        public static readonly CommonRegex Url = new CommonRegex(1, @"((([A-Za-z]{3,9}:(?:\/\/)?)(?:[^-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(:[0-9]+)?|(?:www.|[^-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w_]*)?\??(?:[-\+=&;%@.\w-_]*)#?‌​(?:[\w]*))?)");
+        /// <summary>Matches a URL.</summary>
+        public static readonly CommonRegex Url = new CommonRegex(1, @"((([A-Za-z]{3,9}:(?:\/\/)?)(?:[^-;:&=\+\$,\w]+@)?[A-Za-z0-9.-]+(:[0-9]+)?|(?:www.|[^-;:&=\+\$,\w]+@)[A-Za-z0-9.-]+)((?:\/[\+~%\/.\w_]*)?\??(?:[-\+=&;%@.\w-_]*)#?(?:[\w]*))?)");
+        /// <summary>Matches an e-mail address.</summary>
         public static readonly CommonRegex Email = new CommonRegex(2, @"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}");
         #endregion Statics
 
