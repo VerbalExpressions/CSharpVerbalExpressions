@@ -127,7 +127,7 @@ namespace VerbalExpressionsUnitTests
         {
             //Arrange
             var verbEx = VerbalExpressions.DefaultExpression;
-            string text = string.Format("text that contains {0} a tab", @"\t");
+            string text = "text that contains \t a tab";
 
             //Act
             verbEx.Tab();
