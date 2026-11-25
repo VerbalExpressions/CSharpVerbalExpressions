@@ -32,7 +32,7 @@ jobs:
         run: dotnet pack VerbalExpressions/VerbalExpressions.csproj -c Release -o "$NUGET_OUTPUT"
 
       - name: Upload package
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: nuget
           path: ${{ env.NUGET_OUTPUT }}/*.nupkg
